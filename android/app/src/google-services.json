@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "244307236389",
+    "project_id": "secondshopp-f510b",
+    "storage_bucket": "secondshopp-f510b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244307236389:android:388e0655f5a6a75c3951cc",
+        "android_client_info": {
+          "package_name": "com.example.second_shopp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "244307236389-s07ahld1vekthit6ga4dj9qp2bog2ed9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALVEm32m9EvVnywzd8qwOCUSjpa5peIwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "244307236389-s07ahld1vekthit6ga4dj9qp2bog2ed9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
