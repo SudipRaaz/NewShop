@@ -196,4 +196,37 @@ class _SellState extends State<Sell> {
     _priceController.clear();
     setState(() {});
   }
+
+  // Widget _getMessageList(Sell_Dao sellDao) {
+  //   return Expanded(
+  //     // 1
+  //     child: StreamBuilder<QuerySnapshot>(
+  //       // 2
+  //       stream: sellDao.getMessageStream(),
+  //       // 3
+  //       builder: (context, snapshot) {
+  //         // 4
+  //         if (!snapshot.hasData)
+  //           return const Center(child: LinearProgressIndicator());
+  //         // 5
+  //         return _buildList(context, snapshot.data!.docs);
+  //       },
+  //     ),
+  //   );
+  // }
+
+  // // TODO: Add _buildList
+  // Widget _buildList(BuildContext context, List<DocumentSnapshot>? snapshot) {
+  //   return ListView(
+  //     // physics: const BouncingScrollPhysics(),
+  //     padding: const EdgeInsets.only(top: 20),
+  //     children: snapshot!.map((data) => _buildListItem(context, data)).toList(),
+  //   );
+  // }
+
+  // // TODO: Add _buildListItem
+  // Widget _buildListItem(BuildContext context, DocumentSnapshot snapshot) {
+  //   final message = Message.fromSnapshot(snapshot);
+  //   return MessageWidget(message.text, message.date, message.email);
+  // }
 }

@@ -1,40 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:second_shopp/data/registration_dao.dart';
+import 'package:second_shopp/data/registration_data.dart';
 
-class RegistrationPage extends StatelessWidget {
+class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
 
   @override
+  State<RegistrationPage> createState() => _RegistrationPageState();
+}
+
+class _RegistrationPageState extends State<RegistrationPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  @override
   Widget build(BuildContext context) {
+    final registrationDao =
+        Provider.of<Registration_Dao>(context, listen: false);
+
     return Scaffold(
-        // resizeToAvoidBottomInset: false,
-        // backgroundColor: Colors.white,
-        // appBar: AppBar(
-        //     elevation: 0,
-        //     // ignore: deprecated_member_use
-        //     brightness: Brightness.light,
-        //     backgroundColor: Colors.white,
-        //     leading: IconButton(
-        //         onPressed: () {
-        //           Navigator.pop(context);
-        //         },
-        //         // ignore: prefer_const_constructors
-        //         icon: Icon(
-        //           Icons.arrow_back_ios,
-        //           size: 20,
-        //           color: Colors.black,
-        //         ))),
         body: SafeArea(
       child: ListView(
         children: [
           Container(
-              // height: MediaQuery.of(context).size.height,
-              // width: double.infinity,
-              // color: Colors.cyanAccent,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                 Column(
-                  // ignore: prefer_const_literals_to_create_immutables
                   children: <Widget>[
                     const Padding(
                       padding: EdgeInsets.all(8.0),
@@ -57,11 +52,21 @@ class RegistrationPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: Column(
                       children: <Widget>[
-                        inputFile(label: "Name"),
-                        inputFile(label: "Address"),
-                        inputFile(label: "Phone Number"),
-                        inputFile(label: "email"),
-                        inputFile(label: "password", obscureText: true),
+                        inputFile(
+                            label: "Name", providedController: _nameController),
+                        inputFile(
+                            label: "Address",
+                            providedController: _addressController),
+                        inputFile(
+                            label: "Phone Number",
+                            providedController: _phoneController),
+                        inputFile(
+                            label: "email",
+                            providedController: _emailController),
+                        inputFile(
+                            label: "password",
+                            obscureText: true,
+                            providedController: _passwordController),
                         // inputFile(label: "Credit Card Number")
                       ],
                     )),
@@ -69,19 +74,13 @@ class RegistrationPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: Container(
                       padding: const EdgeInsets.only(top: 30, left: 3),
-                      /*decoration: BoxDecoration(
-                                border: Border(
-                              bottom: BorderSide(color: Colors.black),
-                              top: BorderSide(color: Colors.black),
-                              left: BorderSide(color: Colors.black),
-                              right: BorderSide(color: Colors.black),
-                            ))*/
                       child: MaterialButton(
                           padding: const EdgeInsets.symmetric(horizontal: 50),
                           // minWidth: double.infinity,
                           height: 50,
                           onPressed: () {
-                            Navigator.pop(context);
+                            _storeUsers(registrationDao);
+                            // Navigator.pop(context);
                           },
                           color: Colors.orange.shade400,
                           elevation: 15,
@@ -100,9 +99,26 @@ class RegistrationPage extends StatelessWidget {
       ),
     ));
   }
+
+  void _storeUsers(Registration_Dao registrationDao) {
+    final register = Registration(
+        name: _nameController.text,
+        address: _addressController.text,
+        phone: int.parse(_phoneController.text),
+        email: _emailController.text,
+        password: _passwordController.text);
+    registrationDao.saveUser(register);
+
+    _nameController.clear();
+    _addressController.clear();
+    _phoneController.clear();
+    _emailController.clear();
+    _passwordController.clear();
+    setState(() {});
+  }
 }
 
-Widget inputFile({label, obscureText = false}) {
+Widget inputFile({label, obscureText = false, providedController}) {
   // ignore: prefer_const_literals_to_create_immutables
   return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,6 +135,7 @@ Widget inputFile({label, obscureText = false}) {
           height: 3,
         ),
         TextField(
+          controller: providedController,
           obscureText: obscureText,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
