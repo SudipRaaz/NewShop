@@ -1,10 +1,15 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:second_shopp/components/image_box.dart';
 import 'package:second_shopp/data/sell_dao.dart';
 import 'package:second_shopp/data/sell_data.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Sell extends StatefulWidget {
   Sell({Key? key}) : super(key: key);
@@ -18,6 +23,42 @@ class _SellState extends State<Sell> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+
+  File? _image;
+  final imagePicker = ImagePicker();
+  String? downloadURL;
+
+  // picking the image
+
+  Future imagePickerMethod() async {
+    final pick = await imagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pick != null) {
+        _image = File(pick.path);
+      } else {
+        showSnackBar("No File selected", Duration(milliseconds: 800));
+      }
+    });
+  }
+
+  // uploading the image to firebase cloudstore
+  Future uploadImage(File _image) async {
+    final imgId = DateTime.now().millisecondsSinceEpoch.toString();
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    Reference reference =
+        FirebaseStorage.instance.ref().child('Images').child("post_$imgId");
+
+    await reference.putFile(_image);
+    downloadURL = await reference.getDownloadURL();
+
+    // cloud firestore
+    await firebaseFirestore
+        .collection("users")
+        .doc()
+        .collection("images")
+        .add({'downloadURL': downloadURL}).whenComplete(
+            () => showSnackBar("Image Uploaded", Duration(seconds: 2)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +82,58 @@ class _SellState extends State<Sell> {
               ),
             ),
             Container(
-              height: 150,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: const [
-                  SizedBox(
-                    width: 15,
-                  ),
-                  ImageBox(),
-                  ImageBox(),
-                  ImageBox(),
-                  ImageBox(),
-                ],
-              ),
-            ),
+                height: 300,
+                // color: Colors.black38,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    InkWell(
+                      onTap: imagePickerMethod,
+                      child: Container(
+                        height: 300,
+                        width: 350,
+                        decoration: BoxDecoration(
+                            // image: DecorationImage(image: AssetImage('ass')),
+                            color: Colors.amberAccent,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                        child: _image != null
+                            ? Image.file(
+                                _image!,
+                                fit: BoxFit.cover,
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  _image != null
+                                      ? Image.file(
+                                          _image!,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Icon(
+                                          Icons.add_a_photo_rounded,
+                                          size: 50,
+                                        ),
+                                  Text('Add Image'),
+                                ],
+                              ),
+                      ),
+                    ),
+                  ],
+                )
+                // ListView(
+                //   scrollDirection: Axis.horizontal,
+                //   children: const [
+                //     SizedBox(
+                //       width: 15,
+                //     ),
+                //     ImageBox(),
+                //     ImageBox(),
+                //     ImageBox(),
+                //     ImageBox(),
+                //   ],
+                // ),
+                ),
             SizedBox(
               height: 5,
             ),
@@ -160,7 +239,14 @@ class _SellState extends State<Sell> {
                 color: Colors.orange.shade400,
                 // style: const ButtonStyle(),
                 onPressed: () {
-                  _storeSellItems(sellDao);
+                  if (_image != null) {
+                    uploadImage(_image!);
+                    _storeSellItems(sellDao);
+                  } else {
+                    showSnackBar(
+                        "Select Image first", Duration(milliseconds: 800));
+                  }
+
                   final snackBar = SnackBar(
                     content: Text('Sell button pressed'),
                     action: SnackBarAction(
@@ -197,36 +283,40 @@ class _SellState extends State<Sell> {
     setState(() {});
   }
 
-  // Widget _getMessageList(Sell_Dao sellDao) {
-  //   return Expanded(
-  //     // 1
-  //     child: StreamBuilder<QuerySnapshot>(
-  //       // 2
-  //       stream: sellDao.getMessageStream(),
-  //       // 3
-  //       builder: (context, snapshot) {
-  //         // 4
-  //         if (!snapshot.hasData)
-  //           return const Center(child: LinearProgressIndicator());
-  //         // 5
-  //         return _buildList(context, snapshot.data!.docs);
-  //       },
-  //     ),
-  //   );
+  // uploadImage() async {
+  //   final _storage = FirebaseStorage.instance;
+  //   var image;
+
+  //   //Check Permissions
+  //   await Permission.photos.request();
+
+  //   var permissionStatus = await Permission.photos.status;
+
+  //   if (permissionStatus.isGranted){
+  //     //Select Image
+  //     image = await _picker.getImage(source: ImageSource.gallery);
+  //     var file = File(image.path);
+
+  //     if (image != null){
+  //       //Upload to Firebase
+  //       var snapshot = await _storage.ref()
+  //       .child('folderName/imageName')
+  //       .putFile(file);
+
+  //       var downloadUrl = await snapshot.ref.getDownloadURL();
+
+  //     } else {
+  //       print('No Path Received');
+  //     }
+
+  //   } else {
+  //     print('Grant Permissions and try again');
+  //   }
+
   // }
 
-  // // TODO: Add _buildList
-  // Widget _buildList(BuildContext context, List<DocumentSnapshot>? snapshot) {
-  //   return ListView(
-  //     // physics: const BouncingScrollPhysics(),
-  //     padding: const EdgeInsets.only(top: 20),
-  //     children: snapshot!.map((data) => _buildListItem(context, data)).toList(),
-  //   );
-  // }
-
-  // // TODO: Add _buildListItem
-  // Widget _buildListItem(BuildContext context, DocumentSnapshot snapshot) {
-  //   final message = Message.fromSnapshot(snapshot);
-  //   return MessageWidget(message.text, message.date, message.email);
-  // }
+  showSnackBar(String snackText, Duration d) {
+    final snackBar = SnackBar(content: Text(snackText), duration: d);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }

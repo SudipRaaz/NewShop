@@ -41,6 +41,8 @@ dependencies:
   # for slider home page 
   carousel_slider: ^4.0.0
   smooth_page_indicator: ^1.0.0+2
+  # managing permission 
+  permission_handler: ^8.3.0
   # database
   firebase_core: ^1.10.6
   cloud_firestore: ^3.1.5

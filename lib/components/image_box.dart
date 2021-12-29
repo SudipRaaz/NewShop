@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 
 class ImageBox extends StatefulWidget {
   const ImageBox({Key? key}) : super(key: key);
@@ -15,26 +17,43 @@ class ImageBox extends StatefulWidget {
 
 class _ImageBoxState extends State<ImageBox> {
   File? _image;
+  final imagePicker = ImagePicker();
+  String? downloadURL;
 
-  Future pickImage() async {
-    try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image == null) return;
+  // picking the image
 
-      setState(() {
-        this._image = File(image.path);
-      });
-    } on PlatformException catch (e) {
-      print('failed to pick image: $e');
-    }
+  Future imagePickerMethod() async {
+    final pick = await imagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pick != null) {
+        _image = File(pick.path);
+      } else {
+        print("no file selected");
+      }
+    });
   }
+
+  // File? _imageFile;
+
+  // Future pickImage() async {
+  //   try {
+  //     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+  //     if (image == null) return;
+
+  //     setState(() {
+  //       this._imageFile = File(image.path);
+  //     });
+  //   } on PlatformException catch (e) {
+  //     print('failed to pick image: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         InkWell(
-          onTap: pickImage,
+          onTap: imagePickerMethod,
           child: Container(
             height: 150,
             width: 150,
@@ -55,15 +74,11 @@ class _ImageBoxState extends State<ImageBox> {
                               _image!,
                               fit: BoxFit.cover,
                             )
-                          : Column(
-                              children: [
-                                Icon(
-                                  Icons.add_a_photo_rounded,
-                                  size: 50,
-                                ),
-                                Text('Add Image'),
-                              ],
+                          : Icon(
+                              Icons.add_a_photo_rounded,
+                              size: 50,
                             ),
+                      Text('Add Image'),
                     ],
                   ),
           ),
