@@ -1,8 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:second_shopp/data/registration_dao.dart';
-import 'package:second_shopp/data/sell_dao.dart';
+import 'package:second_shopp/model/data/registration_dao.dart';
+import 'package:second_shopp/model/data/sell_dao.dart';
+
 import 'package:second_shopp/theme_data.dart';
 
 import 'page_layout.dart';

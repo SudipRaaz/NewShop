@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:second_shopp/data/registration_dao.dart';
-import 'package:second_shopp/data/registration_data.dart';
+import 'package:second_shopp/model/data/registration_dao.dart';
+import 'package:second_shopp/model/data/registration_data.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);

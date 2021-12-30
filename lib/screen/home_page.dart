@@ -111,15 +111,7 @@ class Home extends StatelessWidget {
                 ),
 // ******************************************** carousel slider *********************************
                 OfferSlider(),
-                // Container(
-                //   width: 380,
-                //   height: 200,
-                //   decoration: BoxDecoration(
-                //       image: DecorationImage(
-                //           image: AssetImage(imgs[5]), fit: BoxFit.cover),
-                //       borderRadius: BorderRadius.all(Radius.circular(10))),
-                //   child: CarouselSlider(),
-                // ),
+// ******************************************** Items displaying *********************************
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Column(

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:second_shopp/data/sell_data.dart';
+import 'package:second_shopp/model/data/sell_data.dart';
 
 class Sell_Dao {
   final CollectionReference collection =

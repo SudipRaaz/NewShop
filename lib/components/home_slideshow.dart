@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:second_shopp/model/images.dart';
+import 'package:second_shopp/model/offer_data.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OfferSlider extends StatefulWidget {
@@ -25,7 +25,7 @@ class _OfferSliderState extends State<OfferSlider> {
       alignment: AlignmentDirectional.bottomCenter,
       children: [
         CarouselSlider.builder(
-          itemCount: Images.images.length,
+          itemCount: OfferImages.images.length,
           options: CarouselOptions(
             height: 200,
             autoPlay: true,
@@ -39,7 +39,7 @@ class _OfferSliderState extends State<OfferSlider> {
             return Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(Images.images[index]),
+                      image: NetworkImage(OfferImages.images[index]),
                       fit: BoxFit.cover),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             );
@@ -58,7 +58,7 @@ class _OfferSliderState extends State<OfferSlider> {
 
   buildIndicator() => AnimatedSmoothIndicator(
         activeIndex: activeIndex,
-        count: Images.images.length,
+        count: OfferImages.images.length,
         effect: WormEffect(
             dotHeight: 8,
             dotWidth: 8,

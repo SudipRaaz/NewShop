@@ -6,10 +6,9 @@ import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:second_shopp/components/image_box.dart';
-import 'package:second_shopp/data/sell_dao.dart';
-import 'package:second_shopp/data/sell_data.dart';
-import 'package:permission_handler/permission_handler.dart';
+
+import 'package:second_shopp/model/data/sell_dao.dart';
+import 'package:second_shopp/model/data/sell_data.dart';
 
 class Sell extends StatefulWidget {
   Sell({Key? key}) : super(key: key);
@@ -239,22 +238,24 @@ class _SellState extends State<Sell> {
                 color: Colors.orange.shade400,
                 // style: const ButtonStyle(),
                 onPressed: () {
-                  if (_image != null) {
-                    uploadImage(_image!);
-                    _storeSellItems(sellDao);
-                  } else {
-                    showSnackBar(
-                        "Select Image first", Duration(milliseconds: 800));
+                  try {
+                    if (_priceController.text != null) {
+                      if (_image != null) {
+                        _storeSellItems(sellDao);
+                        uploadImage(_image!);
+                        setState(() {
+                          _image = null;
+                        });
+                        showSnackBar("Product Added Sucessfully",
+                            Duration(milliseconds: 800));
+                      }
+                    } else {
+                      showSnackBar(
+                          "Select Image first", Duration(milliseconds: 800));
+                    }
+                  } catch (e) {
+                    showSnackBar("Error: $e", Duration(milliseconds: 800));
                   }
-
-                  final snackBar = SnackBar(
-                    content: Text('Sell button pressed'),
-                    action: SnackBarAction(
-                      label: "Dismiss",
-                      onPressed: () {},
-                    ),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 },
                 child: Center(
                   child: Text(
