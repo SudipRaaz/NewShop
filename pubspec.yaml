@@ -48,6 +48,8 @@ dependencies:
   cloud_firestore: ^3.1.5
   firebase_database: ^9.0.4
   firebase_storage: ^10.2.4
+  #khalti 
+  flutter_khalti: ^1.0.0
 
 
 dev_dependencies:

@@ -2,7 +2,7 @@ import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-class Sell_data {
+class Transaction_Data {
   final String productID;
   final String title;
   final String description;
@@ -11,20 +11,22 @@ class Sell_data {
 
   DocumentReference? reference;
 
-  Sell_data(
+  Transaction_Data(
       {required this.title,
       required this.description,
       required this.category,
       required this.price,
       required this.productID,
       this.reference});
+
 // todo: Add json converters
-  factory Sell_data.fromJson(Map<dynamic, dynamic> json) => Sell_data(
-      productID: json['productID'] as String,
-      title: json['title'] as String,
-      description: (json['description'] as String),
-      category: json['category'] as String,
-      price: int.parse(json['price'] as String));
+  factory Transaction_Data.fromJson(Map<dynamic, dynamic> json) =>
+      Transaction_Data(
+          productID: json['productID'] as String,
+          title: json['title'] as String,
+          description: (json['description'] as String),
+          category: json['category'] as String,
+          price: int.parse(json['price'] as String));
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'productID': productID,
@@ -35,10 +37,10 @@ class Sell_data {
       };
 
   // TODO: Add snapshot
-  factory Sell_data.fromSnapshot(DocumentSnapshot snapshot) {
-    final sell_data =
-        Sell_data.fromJson(snapshot.data() as Map<String, dynamic>);
-    sell_data.reference = snapshot.reference;
-    return sell_data;
+  factory Transaction_Data.fromSnapshot(DocumentSnapshot snapshot) {
+    final transaction_data =
+        Transaction_Data.fromJson(snapshot.data() as Map<String, dynamic>);
+    transaction_data.reference = snapshot.reference;
+    return transaction_data;
   }
 }

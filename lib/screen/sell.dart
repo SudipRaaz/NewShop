@@ -91,7 +91,7 @@ class _SellState extends State<Sell> {
                       child: Container(
                         height: 300,
                         width: 350,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             // image: DecorationImage(image: AssetImage('ass')),
                             color: Colors.amberAccent,
                             borderRadius:
@@ -109,7 +109,7 @@ class _SellState extends State<Sell> {
                                           _image!,
                                           fit: BoxFit.cover,
                                         )
-                                      : Icon(
+                                      : const Icon(
                                           Icons.add_a_photo_rounded,
                                           size: 50,
                                         ),
@@ -271,6 +271,7 @@ class _SellState extends State<Sell> {
 
   void _storeSellItems(Sell_Dao sellDao) {
     final selldata = Sell_data(
+      productID: DateTime.now().millisecondsSinceEpoch.toString(),
       title: _titleController.text,
       description: _descriptionController.text,
       category: _categoryController.text,

@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_khalti/flutter_khalti.dart';
+import 'package:second_shopp/screen/category_page.dart';
 
 class BuyItem extends StatelessWidget {
-  const BuyItem({Key? key}) : super(key: key);
+  String? title;
+  String? name;
+  String? pcategory;
+  String? description = "description";
+  int price = 200;
+  BuyItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +42,7 @@ class BuyItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                       // child: Container(
                       //   color: Colors.indigoAccent,
@@ -47,16 +54,16 @@ class BuyItem extends StatelessWidget {
                         children: [
                           RowData(
                             title: "Title ",
-                            name: "Product name",
+                            name: "$title",
                             icon: Icons.favorite_border_outlined,
                           ),
-                          RowData(title: "Price ", name: "Rs 999"),
-                          RowData(title: "Category ", name: "Product Category"),
+                          RowData(title: "Price ", name: "Rs $price"),
+                          RowData(
+                              title: "Category ", name: pcategory.toString()),
                           RowData(
                               title: "Description ",
-                              name:
-                                  "Product Category bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"),
-                          SizedBox(
+                              name: description.toString()),
+                          const SizedBox(
                             height: 8,
                           ),
                           Row(
@@ -65,7 +72,7 @@ class BuyItem extends StatelessWidget {
                               CircleAvatar(
                                   radius: 28,
                                   backgroundColor: Colors.orange.shade400,
-                                  backgroundImage: NetworkImage(
+                                  backgroundImage: const NetworkImage(
                                       "https://firebasestorage.googleapis.com/v0/b/secondshopp-f510b.appspot.com/o/DefaultPictures%2Fuser.png?alt=media&token=0a4f1565-673e-4953-b087-3b6ed584afb6")),
                               const SizedBox(
                                 width: 15,
@@ -126,7 +133,7 @@ class BuyItem extends StatelessWidget {
                     elevation: 8,
                     padding: const EdgeInsets.all(12),
                     color: Colors.orange.shade300,
-                    onPressed: () {},
+                    onPressed: _sendToKhalti,
                     child: Text(
                       "Buy Now",
                       style: TextStyle(fontSize: 18),
@@ -149,6 +156,29 @@ class BuyItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _sendToKhalti() async {
+    double amount = double.parse(price.toString()) * 100;
+
+    FlutterKhalti _flutterkhalti = FlutterKhalti.configure(
+        publicKey: "test_public_key_ce7622a43dce4ce895e43d7a9db28111",
+        urlSchemeIOS: "khaltiPayFlutterExampleSchema");
+
+    KhaltiProduct product = KhaltiProduct(
+      id: "test",
+      amount: amount,
+      name: "description",
+    );
+
+    _flutterkhalti.startPayment(
+        product: product,
+        onSuccess: (msg) {
+          print("sucess $msg");
+        },
+        onFaliure: (error) {
+          print("failure msg here $error");
+        });
   }
 }
 

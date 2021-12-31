@@ -3,7 +3,7 @@ import 'package:second_shopp/model/data/sell_data.dart';
 
 class Sell_Dao {
   final CollectionReference collection =
-      FirebaseFirestore.instance.collection('userdata');
+      FirebaseFirestore.instance.collection('Products');
   // TODO: Add saveMessage
   void saveSellData(Sell_data selldata) {
     collection.add(selldata.toJson());
