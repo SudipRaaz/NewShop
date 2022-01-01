@@ -1,6 +1,5 @@
 import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 class Sell_data {
   final String productID;
@@ -18,6 +17,7 @@ class Sell_data {
       required this.price,
       required this.productID,
       this.reference});
+
 // todo: Add json converters
   factory Sell_data.fromJson(Map<dynamic, dynamic> json) => Sell_data(
       productID: json['productID'] as String,

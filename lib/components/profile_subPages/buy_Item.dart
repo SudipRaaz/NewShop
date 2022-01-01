@@ -1,17 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_khalti/flutter_khalti.dart';
-import 'package:second_shopp/screen/category_page.dart';
+import 'package:provider/provider.dart';
+import 'package:second_shopp/model/data/transaction.dart';
+import 'package:second_shopp/model/data/transaction_dao.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class BuyItem extends StatelessWidget {
-  String? title;
-  String? name;
-  String? pcategory;
-  String? description = "description";
-  int price = 200;
+class BuyItem extends StatefulWidget {
   BuyItem({Key? key}) : super(key: key);
 
   @override
+  State<BuyItem> createState() => _BuyItemState();
+}
+
+class _BuyItemState extends State<BuyItem> {
+  String? title = 'Product Title';
+
+  // String name = 'Product Name';
+
+  String? pcategory = "category";
+
+  String? description = "description";
+
+  int? price = 200;
+
+  String sellerName = 'seller name';
+  String phoneNumber = "9806977742";
+
+  @override
   Widget build(BuildContext context) {
+    String sellerNumber = '+977$phoneNumber';
+
+    final transactionDao = Provider.of<Transaction_Dao>(context, listen: false);
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -75,18 +95,19 @@ class BuyItem extends StatelessWidget {
                                   backgroundImage: const NetworkImage(
                                       "https://firebasestorage.googleapis.com/v0/b/secondshopp-f510b.appspot.com/o/DefaultPictures%2Fuser.png?alt=media&token=0a4f1565-673e-4953-b087-3b6ed584afb6")),
                               const SizedBox(
-                                width: 15,
+                                width: 10,
                               ),
                               Column(
-                                children: const [
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   Text(
-                                    "Seller Name",
+                                    "$sellerName",
                                     style: TextStyle(
                                         fontSize: 23,
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
-                                    'contact: info',
+                                    'Contact: $phoneNumber',
                                     style: TextStyle(fontSize: 16),
                                   )
                                 ],
@@ -100,7 +121,9 @@ class BuyItem extends StatelessWidget {
                                     side: BorderSide.none,
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(20.0))),
-                                onPressed: () {},
+                                onPressed: () {
+                                  openwhatsapp(sellerNumber);
+                                },
                                 child: const Text(
                                   "Message",
                                   style: TextStyle(fontSize: 18),
@@ -133,9 +156,9 @@ class BuyItem extends StatelessWidget {
                     elevation: 8,
                     padding: const EdgeInsets.all(12),
                     color: Colors.orange.shade300,
-                    onPressed: _sendToKhalti,
+                    onPressed: () {},
                     child: Text(
-                      "Buy Now",
+                      "Add To Watch List",
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -143,9 +166,11 @@ class BuyItem extends StatelessWidget {
                     elevation: 8,
                     padding: const EdgeInsets.all(12),
                     color: Colors.orange.shade300,
-                    onPressed: () {},
-                    child: Text(
-                      "Add To Cart",
+                    onPressed: () {
+                      _sendToKhalti(transactionDao);
+                    },
+                    child: const Text(
+                      "Buy Now",
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -158,7 +183,7 @@ class BuyItem extends StatelessWidget {
     );
   }
 
-  _sendToKhalti() async {
+  _sendToKhalti(transtionDao) {
     double amount = double.parse(price.toString()) * 100;
 
     FlutterKhalti _flutterkhalti = FlutterKhalti.configure(
@@ -173,12 +198,55 @@ class BuyItem extends StatelessWidget {
 
     _flutterkhalti.startPayment(
         product: product,
-        onSuccess: (msg) {
-          print("sucess $msg");
+        onSuccess: (transactionData) {
+          print("success $transactionData");
+          print(transactionData['token'] + 'hope it will be successful');
+          // void _storeTransactionDetails(Transaction_Dao transaction_dao) {
+          //   transaction_dao.saveTransactionData(transactionData);
+          // }
+          _storeTransactionDetails(
+              transtionDao,
+              transactionData['amount'],
+              transactionData['mobile'],
+              transactionData['product_identity'],
+              transactionData['product_name'],
+              transactionData['token']);
+
+          // print('saved to model transaction data $transaction_data ');
         },
         onFaliure: (error) {
           print("failure msg here $error");
         });
+  }
+
+  void _storeTransactionDetails(Transaction_Dao transaction_dao, amount, mobile,
+      product_ID, product_name, token) {
+    print('storeTransaction details function running');
+    final transaction_data = Transaction_Data(
+      amount: amount,
+      mobile: mobile,
+      product_ID: product_ID,
+      product_name: product_name,
+      token: token,
+    );
+    print("$transaction_data data send to transaction data");
+    transaction_dao.saveTransactionData(transaction_data);
+    setState(() {});
+  }
+
+  openwhatsapp(sellerPhoneNum) async {
+    var whatsapp = sellerPhoneNum.toString();
+    var whatsappURl_android =
+        "whatsapp://send?phone=" + whatsapp + "&text=hello";
+    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("hello")}";
+
+    // android , web
+    if (await canLaunch(whatsappURl_android)) {
+      await launch(whatsappURl_android);
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+    }
   }
 }
 

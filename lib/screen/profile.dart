@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:second_shopp/components/Authetication/login_page.dart';
 import 'package:second_shopp/components/profile_subPages/cart_page.dart';
@@ -6,11 +7,28 @@ import 'package:second_shopp/components/profile_subPages/watching_page.dart';
 import 'package:second_shopp/components/profile_tile.dart';
 import 'package:second_shopp/components/profile_subPages/buy_Item.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
   @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  String profileImg = '';
+
+  @override
   Widget build(BuildContext context) {
+    // FirebaseFirestore.instance
+    //     .collection('DefaultData')
+    //     .doc()
+    //     .snapshots()
+    //     .listen((event) {
+    //   setState(() {
+    //     profileImg = event.data()!['image1'];
+    //   });
+    // });
+
     double iconSize = 50;
     String name = "Sudip Raaz ";
 
@@ -66,7 +84,7 @@ class Profile extends StatelessWidget {
                   children: [
                     const CircleAvatar(
                       backgroundImage: NetworkImage(
-                          "https://firebasestorage.googleapis.com/v0/b/secondshopp-f510b.appspot.com/o/DefaultPictures%2Fuser.png?alt=media&token=0a4f1565-673e-4953-b087-3b6ed584afb6"),
+                          "https://images.unsplash.com/photo-1597466765990-64ad1c35dafc"),
                       backgroundColor: Colors.orange,
                       radius: 50,
                     ),
@@ -124,6 +142,26 @@ class Profile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _getImage() async {
+    // var collection = FirebaseFirestore.instance.collection('image1');
+    // var querySnapshot = await collection.get();
+    // for (var queryDocumentSnapshot in querySnapshot.docs) {
+    //   Map<String, dynamic> data = queryDocumentSnapshot.data();
+    //   var name = data['name'];
+    //   var phone = data['phone'];
+    // }
+
+    FirebaseFirestore.instance
+        .collection('DefaultData')
+        .doc()
+        .snapshots()
+        .listen((event) {
+      setState(() {
+        profileImg = event.data()!['image1'];
+      });
+    });
   }
 }
 

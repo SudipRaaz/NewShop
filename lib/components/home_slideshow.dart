@@ -39,7 +39,7 @@ class _OfferSliderState extends State<OfferSlider> {
             return Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(OfferImages.images[index]),
+                      image: AssetImage(OfferImages.images[index]),
                       fit: BoxFit.cover),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             );

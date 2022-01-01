@@ -9,37 +9,11 @@ class Inbox extends StatelessWidget {
   Widget build(BuildContext context) => DefaultTabController(
       length: 2,
       child: Scaffold(
-          appBar: AppBar(
-            title: Text('Inbox and NOtification'),
-            centerTitle: true,
-            backgroundColor: Colors.orange.shade400,
-            bottom: TabBar(
-              tabs: [
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text('Chat  '),
-                      Icon(Icons.chat),
-                    ],
-                  ),
-                ),
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text('Notification '),
-                      Icon(Icons.notifications),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-          body: const TabBarView(
-            children: [
-              Chat(),
-              Inbox_Notification(),
-            ],
-          )));
+        appBar: AppBar(
+          title: Text('Notification'),
+          centerTitle: true,
+          backgroundColor: Colors.orange.shade400,
+        ),
+        body: Inbox_Notification(),
+      ));
 }

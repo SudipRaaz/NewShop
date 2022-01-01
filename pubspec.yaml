@@ -50,6 +50,8 @@ dependencies:
   firebase_storage: ^10.2.4
   #khalti 
   flutter_khalti: ^1.0.0
+  # url launcher
+  url_launcher: ^6.0.17
 
 
 dev_dependencies:

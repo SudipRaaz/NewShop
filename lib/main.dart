@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:second_shopp/model/data/registration_dao.dart';
 import 'package:second_shopp/model/data/sell_dao.dart';
+import 'package:second_shopp/model/data/transaction_dao.dart';
 
 import 'package:second_shopp/theme_data.dart';
 
@@ -26,6 +27,7 @@ class SecondShop extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => TabManager()),
         Provider(create: (_) => Sell_Dao()),
         Provider(create: (_) => Registration_Dao()),
+        Provider(create: (_) => Transaction_Dao()),
       ],
       child: MaterialApp(
         theme: theme,

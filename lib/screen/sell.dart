@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'package:second_shopp/model/data/sell_dao.dart';
 import 'package:second_shopp/model/data/sell_data.dart';
+import 'package:second_shopp/model/data/transaction_dao.dart';
 
 class Sell extends StatefulWidget {
   Sell({Key? key}) : super(key: key);

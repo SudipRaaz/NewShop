@@ -20,7 +20,8 @@ class _Inbox_NotificationState extends State<Inbox_Notification> {
         itemBuilder: (context, int index) {
           return Notify_Contend(
             Notification_title: 'Verification',
-            description: 'phone number ',
+            description:
+                'phone number bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
           );
         },
         separatorBuilder: (context, index) {
