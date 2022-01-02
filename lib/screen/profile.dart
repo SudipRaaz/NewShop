@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:second_shopp/components/Authetication/login_page.dart';
@@ -17,17 +19,65 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   String profileImg = '';
 
+  String username = '';
+  String userPhone = '';
+
   @override
   Widget build(BuildContext context) {
     // FirebaseFirestore.instance
-    //     .collection('DefaultData')
-    //     .doc()
-    //     .snapshots()
-    //     .listen((event) {
-    //   setState(() {
-    //     profileImg = event.data()!['image1'];
+    //     .collection('user data')
+    //     .get()
+    //     .then((QuerySnapshot querySnapshot) {
+    //   querySnapshot.docs.forEach((doc) {
+    //     setState(() {
+    //       username = doc['Name'];
+    //       userPhone = doc['Phone'];
+    //     });
     //   });
     // });
+
+    FirebaseFirestore.instance
+        .collection('user data')
+        .doc('O3sY4JCTLKVJwPdesJDJ')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        print('Document data: ${documentSnapshot.data()}');
+        Map<String, dynamic> userData =
+            documentSnapshot.data() as Map<String, dynamic>;
+        setState(() {
+          username = userData['Name'];
+          userPhone = userData['Phone'];
+        });
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
+
+    // CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    // FutureBuilder<DocumentSnapshot>(
+    //     future: users.doc('O3sY4JCTLKVJwPdesJDJ').get(),
+    //     builder:
+    //         (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    //       if (snapshot.hasError) {
+    //         return Text("Something went wrong");
+    //       }
+
+    //       if (snapshot.hasData && !snapshot.data!.exists) {
+    //         return Text("Document does not exist");
+    //       }
+
+    //       if (snapshot.connectionState == ConnectionState.done) {
+    //         Map<String, dynamic> data =
+    //             snapshot.data!.data() as Map<String, dynamic>;
+    //         // setState(() {
+    //         //   username = data['Name'];
+    //         //   userPhone = data['Phone'];
+    //         // });
+    //         return Text("Full Name: ${data['full_name']} ${data['last_name']}");
+    //       }
+    //     });
 
     double iconSize = 50;
     String name = "Sudip Raaz ";
@@ -89,16 +139,18 @@ class _ProfileState extends State<Profile> {
                       radius: 50,
                     ),
                     const SizedBox(
-                      width: 30,
+                      width: 15,
                     ),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          name,
+                          username,
                           style: const TextStyle(
                               fontSize: 25, fontWeight: FontWeight.bold),
                         ),
-                        Text("User's Bio", style: TextStyle(fontSize: 15)),
+                        Text("contact: $userPhone",
+                            style: TextStyle(fontSize: 15)),
                       ],
                     ),
                   ],

@@ -286,38 +286,6 @@ class _SellState extends State<Sell> {
     setState(() {});
   }
 
-  // uploadImage() async {
-  //   final _storage = FirebaseStorage.instance;
-  //   var image;
-
-  //   //Check Permissions
-  //   await Permission.photos.request();
-
-  //   var permissionStatus = await Permission.photos.status;
-
-  //   if (permissionStatus.isGranted){
-  //     //Select Image
-  //     image = await _picker.getImage(source: ImageSource.gallery);
-  //     var file = File(image.path);
-
-  //     if (image != null){
-  //       //Upload to Firebase
-  //       var snapshot = await _storage.ref()
-  //       .child('folderName/imageName')
-  //       .putFile(file);
-
-  //       var downloadUrl = await snapshot.ref.getDownloadURL();
-
-  //     } else {
-  //       print('No Path Received');
-  //     }
-
-  //   } else {
-  //     print('Grant Permissions and try again');
-  //   }
-
-  // }
-
   showSnackBar(String snackText, Duration d) {
     final snackBar = SnackBar(content: Text(snackText), duration: d);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
