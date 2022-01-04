@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class Transaction_Data {
-  final String amount;
+  final double amount;
   final String mobile;
   final String product_ID;
   final String product_name;
@@ -22,7 +22,7 @@ class Transaction_Data {
 // todo: Add json converters
   factory Transaction_Data.fromJson(Map<dynamic, dynamic> json) =>
       Transaction_Data(
-        amount: json['amount'] as String,
+        amount: json['amount'] as double,
         mobile: json['mobile'] as String,
         product_ID: (json['product_ID'] as String),
         product_name: json['product_name'] as String,

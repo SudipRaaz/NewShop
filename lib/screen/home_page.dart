@@ -1,6 +1,6 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:second_shopp/components/home_slideshow.dart';
+import 'package:second_shopp/components/profile_subPages/cart_page.dart';
 import 'package:second_shopp/components/tile_components.dart';
 
 class Home extends StatelessWidget {
@@ -25,9 +25,12 @@ class Home extends StatelessWidget {
           elevation: 0,
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CartItems()));
+                },
                 icon: Icon(
-                  Icons.card_travel_outlined,
+                  Icons.shopping_cart,
                   size: 40,
                 )),
             SizedBox(

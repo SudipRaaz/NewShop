@@ -57,7 +57,7 @@ class _Notification_pageState extends State<Notification_page> {
           }
           if (!snapshot.hasData) {
             return const Center(
-              child: Text('No New Nofications'),
+              child: Text('waiting ...'),
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -92,7 +92,7 @@ class _Notification_pageState extends State<Notification_page> {
                 child: ListView.separated(
                   itemCount: notificationDocs.length,
                   itemBuilder: (context, int index) {
-                    return (notificationDocs.isEmpty == true)
+                    return (notificationDocs.length == 0)
                         ? ElevatedButton(
                             onPressed: () {}, child: Text('No Notifications'))
                         : Notify_Contend(

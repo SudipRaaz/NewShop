@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:second_shopp/components/Authetication/login_page.dart';
 import 'package:second_shopp/components/profile_subPages/cart_page.dart';
@@ -8,6 +7,7 @@ import 'package:second_shopp/components/profile_subPages/selling_page.dart';
 import 'package:second_shopp/components/profile_subPages/watching_page.dart';
 import 'package:second_shopp/components/profile_tile.dart';
 import 'package:second_shopp/components/profile_subPages/buy_Item.dart';
+import 'package:second_shopp/model/tab_manager.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -17,6 +17,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final _auth = FirebaseAuth.instance;
+
   String profileImg = '';
 
   String username = '';
@@ -35,24 +37,24 @@ class _ProfileState extends State<Profile> {
     //     });
     //   });
     // });
-
-    FirebaseFirestore.instance
-        .collection('user data')
-        .doc('O3sY4JCTLKVJwPdesJDJ')
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        print('Document data: ${documentSnapshot.data()}');
-        Map<String, dynamic> userData =
-            documentSnapshot.data() as Map<String, dynamic>;
-        setState(() {
-          username = userData['Name'];
-          userPhone = userData['Phone'];
-        });
-      } else {
-        print('Document does not exist on the database');
-      }
-    });
+//************************************************************************************************* */
+    // FirebaseFirestore.instance
+    //     .collection('UserData')
+    //     .doc('j8iuhBWwzct6U0OEpP0X')
+    //     .get()
+    //     .then((DocumentSnapshot documentSnapshot) {
+    //   if (documentSnapshot.exists) {
+    //     print('Document data: ${documentSnapshot.data()}');
+    //     Map<String, dynamic> userData =
+    //         documentSnapshot.data() as Map<String, dynamic>;
+    //     setState(() {
+    //       username = userData['Name'];
+    //       userPhone = userData['Phone'];
+    //     });
+    //   } else {
+    //     print('Document does not exist on the database');
+    //   }
+    // });
 
     // CollectionReference users = FirebaseFirestore.instance.collection('users');
 
@@ -85,7 +87,8 @@ class _ProfileState extends State<Profile> {
     List profileTileName = <String>["selg", "Cart", "Favorite"];
     return Scaffold(
       body: SafeArea(
-        child: Container(
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           // color: Colors.cyanAccent,
           child: Column(children: [
             Row(
@@ -93,10 +96,22 @@ class _ProfileState extends State<Profile> {
               children: [
                 InkWell(
                   child: Icon(Icons.share, size: iconSize),
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const AlertDialog(
+                            content: Text('Alert!'),
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(2.0))),
+                          );
+                        });
+                    // User? userData = _auth.currentUser;
+                    // print("the user ID = ${userData?.uid}");
+                  },
                   radius: 20,
                   splashColor: Colors.amberAccent,
-                  // highlightColor:
                 ),
                 InkWell(
                   child: Icon(Icons.settings, size: iconSize),
@@ -113,10 +128,13 @@ class _ProfileState extends State<Profile> {
                 InkWell(
                   child: Icon(Icons.logout, size: iconSize),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()));
+                    setState(() {
+                      TabManager().goToTab(0);
+                    });
+                    _auth.signOut();
+
+                    // Navigator.of(context).pushReplacement(
+                    //     MaterialPageRoute(builder: (context) => LoginPage()));
                   },
                   radius: 20,
                   splashColor: Colors.amberAccent,

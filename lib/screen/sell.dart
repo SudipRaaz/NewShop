@@ -120,21 +120,8 @@ class _SellState extends State<Sell> {
                       ),
                     ),
                   ],
-                )
-                // ListView(
-                //   scrollDirection: Axis.horizontal,
-                //   children: const [
-                //     SizedBox(
-                //       width: 15,
-                //     ),
-                //     ImageBox(),
-                //     ImageBox(),
-                //     ImageBox(),
-                //     ImageBox(),
-                //   ],
-                // ),
-                ),
-            SizedBox(
+                )),
+            const SizedBox(
               height: 5,
             ),
             Padding(
@@ -143,7 +130,7 @@ class _SellState extends State<Sell> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Title :  ',
                         style: TextStyle(fontSize: 25),
                       ),
@@ -153,12 +140,12 @@ class _SellState extends State<Sell> {
                             controller: _titleController,
                             textAlign: TextAlign.start,
                             textAlignVertical: TextAlignVertical.bottom,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Enter Product Name',
                               border: OutlineInputBorder(),
                             )),
                       ),
-                      Padding(
+                      const Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: SizedBox(
                           child: Text('Description : ',
@@ -235,7 +222,7 @@ class _SellState extends State<Sell> {
               height: 50,
               width: 150,
               child: MaterialButton(
-                padding: EdgeInsets.all(3),
+                padding: const EdgeInsets.all(3),
                 color: Colors.orange.shade400,
                 // style: const ButtonStyle(),
                 onPressed: () {
@@ -251,14 +238,14 @@ class _SellState extends State<Sell> {
                             Duration(milliseconds: 800));
                       }
                     } else {
-                      showSnackBar(
-                          "Select Image first", Duration(milliseconds: 800));
+                      showSnackBar("Select Image and Fill all Data",
+                          Duration(milliseconds: 1200));
                     }
                   } catch (e) {
                     showSnackBar("Error: $e", Duration(milliseconds: 800));
                   }
                 },
-                child: Center(
+                child: const Center(
                   child: Text(
                     'Sell it',
                     style: TextStyle(fontSize: 25),

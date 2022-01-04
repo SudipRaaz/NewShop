@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:second_shopp/model/data/registration_dao.dart';
@@ -18,6 +19,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+
+    Provider.of<User?>(context, listen: false);
     final registrationDao =
         Provider.of<Registration_Dao>(context, listen: false);
 
@@ -57,9 +61,36 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         inputFile(
                             label: "Address",
                             providedController: _addressController),
-                        inputFile(
-                            label: "Phone Number",
-                            providedController: _phoneController),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const Text(
+                                "Phone Number",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              TextField(
+                                keyboardType: TextInputType.phone,
+                                controller: _phoneController,
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 10),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        const BorderSide(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              )
+                            ]),
                         inputFile(
                             label: "email",
                             providedController: _emailController),
@@ -67,7 +98,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             label: "password",
                             obscureText: true,
                             providedController: _passwordController),
-                        // inputFile(label: "Credit Card Number")
                       ],
                     )),
                 Padding(
@@ -79,8 +109,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           // minWidth: double.infinity,
                           height: 50,
                           onPressed: () {
-                            _storeUsers(registrationDao);
-                            // Navigator.pop(context);
+                            try {
+                              _auth.createUserWithEmailAndPassword(
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text);
+                              _storeUsers(registrationDao);
+                            } catch (e) {
+                              print("Error: $e");
+                            }
                           },
                           color: Colors.orange.shade400,
                           elevation: 15,
@@ -89,7 +125,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           ),
                           child: const Text("Register",
                               style: TextStyle(
-                                // fontWeight: FontWeight.w600,
                                 fontSize: 25,
                                 color: Colors.white,
                               ))),
@@ -114,38 +149,37 @@ class _RegistrationPageState extends State<RegistrationPage> {
     _phoneController.clear();
     _emailController.clear();
     _passwordController.clear();
-    setState(() {});
   }
 }
 
 Widget inputFile({label, obscureText = false, providedController}) {
-  // ignore: prefer_const_literals_to_create_immutables
   return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
             // color: Colors.black87,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 3,
         ),
         TextField(
           controller: providedController,
           obscureText: obscureText,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
+              borderSide: const BorderSide(color: Colors.grey),
               borderRadius: BorderRadius.circular(50),
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         )
       ]);
