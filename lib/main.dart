@@ -9,9 +9,7 @@ import 'package:second_shopp/model/data/notification_dao.dart';
 import 'package:second_shopp/model/data/registration_dao.dart';
 import 'package:second_shopp/model/data/sell_dao.dart';
 import 'package:second_shopp/model/data/transaction_dao.dart';
-
 import 'package:second_shopp/theme_data.dart';
-
 import 'page_layout.dart';
 import 'model/tab_manager.dart';
 
