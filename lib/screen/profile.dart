@@ -199,8 +199,8 @@ class _ProfileState extends State<Profile> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => BuyItem()));
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) => BuyDetail_Page(press: ,)));
                   },
                   child: _ProfileTile(
                     tileName: "Watching Items",

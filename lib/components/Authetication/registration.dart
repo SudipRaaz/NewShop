@@ -114,6 +114,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   email: _emailController.text.trim(),
                                   password: _passwordController.text);
                               _storeUsers(registrationDao);
+                              Navigator.pop(context);
                             } catch (e) {
                               print("Error: $e");
                             }
