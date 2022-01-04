@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:second_shopp/components/home_slideshow.dart';
+import 'package:second_shopp/components/profile_subPages/buy_Item.dart';
 import 'package:second_shopp/components/profile_subPages/cart_page.dart';
 import 'package:second_shopp/components/tile_components.dart';
 
@@ -134,8 +135,12 @@ class Home extends StatelessWidget {
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (context, int index) {
                                   return ItemTiles(
-                                    index: index,
-                                  );
+                                      index: index,
+                                      press: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BuyDetail_Page())));
                                 },
                                 separatorBuilder: (context, int index) {
                                   return const SizedBox(
@@ -150,96 +155,96 @@ class Home extends StatelessWidget {
                           style: TextStyle(fontSize: 25),
                         ),
                       ),
-                      Container(
-                        height: 190,
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, int index) {
-                                  return ItemTiles(
-                                    index: index,
-                                  );
-                                },
-                                separatorBuilder: (context, int index) {
-                                  return const SizedBox(
-                                    width: 8,
-                                  );
-                                },
-                                itemCount: imgs.length)),
-                      ),
-                      const SizedBox(
-                        child: Text(
-                          'Mobiles Items',
-                          style: TextStyle(fontSize: 25),
-                        ),
-                      ),
-                      Container(
-                        height: 190,
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, int index) {
-                                  return ItemTiles(
-                                    index: index,
-                                  );
-                                },
-                                separatorBuilder: (context, int index) {
-                                  return const SizedBox(
-                                    width: 8,
-                                  );
-                                },
-                                itemCount: imgs.length)),
-                      ),
-                      const SizedBox(
-                        child: Text(
-                          'Sports Items',
-                          style: TextStyle(fontSize: 25),
-                        ),
-                      ),
-                      Container(
-                        height: 190,
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, int index) {
-                                  return ItemTiles(
-                                    index: index,
-                                  );
-                                },
-                                separatorBuilder: (context, int index) {
-                                  return const SizedBox(
-                                    width: 8,
-                                  );
-                                },
-                                itemCount: imgs.length)),
-                      ),
-                      const SizedBox(
-                        child: Text(
-                          'Health Items',
-                          style: TextStyle(fontSize: 25),
-                        ),
-                      ),
-                      Container(
-                        height: 190,
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, int index) {
-                                  return ItemTiles(
-                                    index: index,
-                                  );
-                                },
-                                separatorBuilder: (context, int index) {
-                                  return const SizedBox(
-                                    width: 8,
-                                  );
-                                },
-                                itemCount: imgs.length)),
-                      ),
+                      // Container(
+                      //   height: 190,
+                      //   child: Padding(
+                      //       padding: const EdgeInsets.all(8.0),
+                      //       child: ListView.separated(
+                      //           scrollDirection: Axis.horizontal,
+                      //           itemBuilder: (context, int index) {
+                      //             return ItemTiles(
+                      //               index: index,
+                      //             );
+                      //           },
+                      //           separatorBuilder: (context, int index) {
+                      //             return const SizedBox(
+                      //               width: 8,
+                      //             );
+                      //           },
+                      //           itemCount: imgs.length)),
+                      // ),
+                      // const SizedBox(
+                      //   child: Text(
+                      //     'Mobiles Items',
+                      //     style: TextStyle(fontSize: 25),
+                      //   ),
+                      // ),
+                      // Container(
+                      //   height: 190,
+                      //   child: Padding(
+                      //       padding: const EdgeInsets.all(8.0),
+                      //       child: ListView.separated(
+                      //           scrollDirection: Axis.horizontal,
+                      //           itemBuilder: (context, int index) {
+                      //             return ItemTiles(
+                      //               index: index,
+                      //             );
+                      //           },
+                      //           separatorBuilder: (context, int index) {
+                      //             return const SizedBox(
+                      //               width: 8,
+                      //             );
+                      //           },
+                      //           itemCount: imgs.length)),
+                      // ),
+                      // const SizedBox(
+                      //   child: Text(
+                      //     'Sports Items',
+                      //     style: TextStyle(fontSize: 25),
+                      //   ),
+                      // ),
+                      // Container(
+                      //   height: 190,
+                      //   child: Padding(
+                      //       padding: const EdgeInsets.all(8.0),
+                      //       child: ListView.separated(
+                      //           scrollDirection: Axis.horizontal,
+                      //           itemBuilder: (context, int index) {
+                      //             return ItemTiles(
+                      //               index: index,
+                      //             );
+                      //           },
+                      //           separatorBuilder: (context, int index) {
+                      //             return const SizedBox(
+                      //               width: 8,
+                      //             );
+                      //           },
+                      //           itemCount: imgs.length)),
+                      // ),
+                      // const SizedBox(
+                      //   child: Text(
+                      //     'Health Items',
+                      //     style: TextStyle(fontSize: 25),
+                      //   ),
+                      // ),
+                      // Container(
+                      //   height: 190,
+                      //   child: Padding(
+                      //       padding: const EdgeInsets.all(8.0),
+                      //       child: ListView.separated(
+                      //           scrollDirection: Axis.horizontal,
+                      //           itemBuilder: (context, int index) {
+                      //             return ItemTiles(
+                      //               index: index,
+                      //             );
+                      //           },
+                      //           separatorBuilder: (context, int index) {
+                      //             return const SizedBox(
+                      //               width: 8,
+                      //             );
+                      //           },
+                      //           itemCount: imgs.length)),
+                      // ),
                     ],
                   ),
                 ),
