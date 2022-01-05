@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,9 @@ class _SellState extends State<Sell> {
 
   File? _image;
   final imagePicker = ImagePicker();
-  String? downloadURL;
+  String downloadURL = '';
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? userID = '';
 
   // picking the image
 
@@ -42,26 +45,36 @@ class _SellState extends State<Sell> {
   }
 
   // uploading the image to firebase cloudstore
-  Future uploadImage(File _image) async {
-    final imgId = DateTime.now().millisecondsSinceEpoch.toString();
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    Reference reference =
-        FirebaseStorage.instance.ref().child('Images').child("post_$imgId");
+  Future uploadImage(File _image, sellDao) async {
+    try {
+      final imgId = DateTime.now().millisecondsSinceEpoch.toString();
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      Reference reference = FirebaseStorage.instance
+          .ref()
+          .child('ProductImages')
+          .child("post_$imgId");
 
-    await reference.putFile(_image);
-    downloadURL = await reference.getDownloadURL();
+      await reference.putFile(_image);
+      downloadURL = await reference.getDownloadURL();
 
-    // cloud firestore
-    await firebaseFirestore
-        .collection("users")
-        .doc()
-        .collection("images")
-        .add({'downloadURL': downloadURL}).whenComplete(
-            () => showSnackBar("Image Uploaded", Duration(seconds: 2)));
+      // cloud firestore
+      // await firebaseFirestore.collection("Products")
+      //     // .doc()
+      //     // .collection("Images")
+      //     .add({'downloadURL': downloadURL}).whenComplete(
+      //         () => showSnackBar("Image Uploaded", Duration(seconds: 2)));
+      _storeSellItems(sellDao, downloadURL);
+    } catch (e) {
+      showSnackBar("Error: $e", Duration(seconds: 5));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    User? userToken = _auth.currentUser;
+    userID = userToken?.uid;
+    print("userToken = $userID");
+
     // TODO: Add MessageDao
     final sellDao = Provider.of<Sell_Dao>(context, listen: false);
 
@@ -229,8 +242,7 @@ class _SellState extends State<Sell> {
                   try {
                     if (_priceController.text != null) {
                       if (_image != null) {
-                        _storeSellItems(sellDao);
-                        uploadImage(_image!);
+                        uploadImage(_image!, sellDao);
                         setState(() {
                           _image = null;
                         });
@@ -257,14 +269,15 @@ class _SellState extends State<Sell> {
         ]));
   }
 
-  void _storeSellItems(Sell_Dao sellDao) {
+  void _storeSellItems(Sell_Dao sellDao, downloadURL) {
     final selldata = Sell_data(
-      productID: DateTime.now().millisecondsSinceEpoch.toString(),
-      title: _titleController.text,
-      description: _descriptionController.text,
-      category: _categoryController.text,
-      price: int.parse(_priceController.text),
-    );
+        productID: DateTime.now().millisecondsSinceEpoch.toString(),
+        title: _titleController.text,
+        description: _descriptionController.text,
+        category: _categoryController.text,
+        price: int.parse(_priceController.text),
+        downloadURL: downloadURL,
+        UserID: userID.toString());
     sellDao.saveSellData(selldata);
     _titleController.clear();
     _descriptionController.clear();

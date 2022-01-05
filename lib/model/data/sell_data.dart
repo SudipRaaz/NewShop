@@ -7,6 +7,8 @@ class Sell_data {
   final String description;
   final String category;
   final int price;
+  final String downloadURL;
+  final String UserID;
 
   DocumentReference? reference;
 
@@ -16,15 +18,20 @@ class Sell_data {
       required this.category,
       required this.price,
       required this.productID,
+      required this.downloadURL,
+      required this.UserID,
       this.reference});
 
 // todo: Add json converters
   factory Sell_data.fromJson(Map<dynamic, dynamic> json) => Sell_data(
-      productID: json['productID'] as String,
-      title: json['title'] as String,
-      description: (json['description'] as String),
-      category: json['category'] as String,
-      price: int.parse(json['price'] as String));
+        productID: json['productID'] as String,
+        title: json['title'] as String,
+        description: (json['description'] as String),
+        category: json['category'] as String,
+        price: int.parse(json['price'] as String),
+        downloadURL: (json['downloadURL'] as String),
+        UserID: (json['UserID'] as String),
+      );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'productID': productID,
@@ -32,6 +39,8 @@ class Sell_data {
         'description': description,
         'category': category,
         'price': price.toString(),
+        'downloadURL': downloadURL,
+        'UserID': UserID,
       };
 
   // TODO: Add snapshot

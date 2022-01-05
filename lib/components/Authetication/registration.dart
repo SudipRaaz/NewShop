@@ -108,12 +108,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 50),
                           // minWidth: double.infinity,
                           height: 50,
-                          onPressed: () {
+                          onPressed: () async {
                             try {
-                              _auth.createUserWithEmailAndPassword(
+                              await _auth.createUserWithEmailAndPassword(
                                   email: _emailController.text.trim(),
                                   password: _passwordController.text);
-                              _storeUsers(registrationDao);
+
+                              User? userToken = _auth.currentUser;
+                              String? userID = userToken?.uid;
+                              print("userToken = $userID");
+                              _storeUsers(registrationDao, userID);
                               Navigator.pop(context);
                             } catch (e) {
                               print("Error: $e");
@@ -136,14 +140,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
     ));
   }
 
-  void _storeUsers(Registration_Dao registrationDao) {
+  void _storeUsers(Registration_Dao registrationDao, userID) {
     final register = Registration(
         name: _nameController.text,
         address: _addressController.text,
         phone: int.parse(_phoneController.text),
         email: _emailController.text,
         password: _passwordController.text);
-    registrationDao.saveUser(register);
+    registrationDao.saveUser(register, userID);
 
     _nameController.clear();
     _addressController.clear();

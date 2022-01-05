@@ -147,10 +147,15 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () async {
                           try {
                             FocusManager.instance.primaryFocus?.unfocus();
-                            context.read<AuthenticationService>().signIn(
+                            await context.read<AuthenticationService>().signIn(
                                   email: _email.trim(),
                                   password: _password.trim(),
                                 );
+                            // await userID = _auth.currentUser;
+                            // print("current user ID : $userID");
+                            User? userToken = _auth.currentUser;
+                            String? userID = userToken?.uid;
+                            print("userToken = $userID");
                             showSnackBar("Please wait ... ",
                                 const Duration(milliseconds: 1200));
                           } catch (e) {
@@ -163,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                         //     await _auth.signInWithEmailAndPassword(
                         //         email: _email, password: _password);
 
-                        //     User? userToken = _auth.currentUser;
+                        // User? userToken = _auth.currentUser;
                         //     String? userID = userToken?.uid;
                         //     print("userToken = $userToken");
                         //     print("userToken passed = ${userToken?.uid}");
