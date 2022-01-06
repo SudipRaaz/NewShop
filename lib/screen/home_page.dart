@@ -20,37 +20,36 @@ class Home extends StatelessWidget {
     'assets/images/7.jpg',
   ];
 
-  final List ProductsDocs = [];
-  List product = [];
+  List ProductsDocs = [];
+  final List recommendedItems = [];
 
   void popularItems() {
     FirebaseFirestore.instance
         .collection('Products')
+        .doc('SubProductsCategory')
+        .collection('RecommendedItems')
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.map((DocumentSnapshot document) {
         Map productdata = document.data() as Map<String, dynamic>;
-        product.add(productdata);
+        recommendedItems.add(productdata);
         // a['id'] = document.id;
       }).toList();
 
-      print("doc snapshot : ${product}");
-      // querySnapshot.docs.forEach((doc) {
-      //   // product = doc as Map<String, dynamic>;
-      // });
+      print("recommended snapshot : ${recommendedItems}");
     });
   }
 
   @override
   Widget build(BuildContext context) {
     popularItems();
-    final sellDao = Provider.of<Sell_Dao>(context, listen: false);
+    // final sellDao = Provider.of<Sell_Dao>(context, listen: false);
     // final ProductStream = Sell_Dao().getProductStream();
     final Stream<QuerySnapshot> ProductStream = FirebaseFirestore.instance
         .collection('Products')
         // .where('title', isEqualTo: 'product 1')
-        // .doc('SubProductsCategory')
-        // .collection('PopularItems')
+        .doc('SubProductsCategory')
+        .collection('PopularItems')
         .snapshots();
 
     return StreamBuilder<QuerySnapshot>(
@@ -69,6 +68,7 @@ class Home extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
+          ProductsDocs = [];
 
           snapshot.data!.docs.map((DocumentSnapshot document) {
             Map productdata = document.data() as Map<String, dynamic>;
@@ -183,37 +183,37 @@ class Home extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
-                              child: Text(
-                                'Top Selling',
-                                style: TextStyle(fontSize: 25),
-                              ),
-                            ),
-                            Container(
-                              height: 190,
-                              child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ListView.separated(
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, int index) {
-                                        return ItemTiles(
-                                          index: index,
-                                          press: () {},
-                                          productsData: ProductsDocs,
-                                          title: ProductsDocs[index]['title'],
-                                          donwloadURL: ProductsDocs[index]
-                                              ['downloadURL'],
-                                          price: int.parse(
-                                              ProductsDocs[index]['price']),
-                                        );
-                                      },
-                                      separatorBuilder: (context, int index) {
-                                        return const SizedBox(
-                                          width: 8,
-                                        );
-                                      },
-                                      itemCount: ProductsDocs.length)),
-                            ),
+                            // const SizedBox(
+                            //   child: Text(
+                            //     'Top Selling',
+                            //     style: TextStyle(fontSize: 25),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   height: 210,
+                            //   child: Padding(
+                            //       padding: const EdgeInsets.all(8.0),
+                            //       child: ListView.separated(
+                            //           scrollDirection: Axis.horizontal,
+                            //           itemBuilder: (context, int index) {
+                            //             return ItemTiles(
+                            //               index: index,
+                            //               press: () {},
+                            //               productsData: ProductsDocs,
+                            //               title: ProductsDocs[index]['title'],
+                            //               downloadURL: ProductsDocs[index]
+                            //                   ['downloadURL'],
+                            //               price: int.parse(
+                            //                   ProductsDocs[index]['price']),
+                            //             );
+                            //           },
+                            //           separatorBuilder: (context, int index) {
+                            //             return const SizedBox(
+                            //               width: 8,
+                            //             );
+                            //           },
+                            //           itemCount: ProductsDocs.length)),
+                            // ),
                             const SizedBox(
                               child: Text(
                                 'Recommended Items',
@@ -221,7 +221,7 @@ class Home extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              height: 190,
+                              height: 210,
                               child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ListView.separated(
@@ -230,12 +230,13 @@ class Home extends StatelessWidget {
                                         return ItemTiles(
                                           index: index,
                                           press: () {},
-                                          productsData: ProductsDocs,
-                                          title: ProductsDocs[index]['title'],
-                                          donwloadURL: ProductsDocs[index]
+                                          productsData: recommendedItems,
+                                          title: recommendedItems[index]
+                                              ['title'],
+                                          downloadURL: recommendedItems[index]
                                               ['downloadURL'],
                                           price: int.parse(
-                                              ProductsDocs[index]['price']),
+                                              recommendedItems[index]['price']),
                                         );
                                       },
                                       separatorBuilder: (context, int index) {
@@ -243,70 +244,70 @@ class Home extends StatelessWidget {
                                           width: 8,
                                         );
                                       },
-                                      itemCount: ProductsDocs.length)),
+                                      itemCount: recommendedItems.length)),
                             ),
-                            const SizedBox(
-                              child: Text(
-                                'Mobiles Items',
-                                style: TextStyle(fontSize: 25),
-                              ),
-                            ),
-                            Container(
-                              height: 190,
-                              child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ListView.separated(
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, int index) {
-                                        return ItemTiles(
-                                          index: index,
-                                          press: () {},
-                                          productsData: ProductsDocs,
-                                          title: ProductsDocs[index]['title'],
-                                          donwloadURL: ProductsDocs[index]
-                                              ['downloadURL'],
-                                          price: int.parse(
-                                              ProductsDocs[index]['price']),
-                                        );
-                                      },
-                                      separatorBuilder: (context, int index) {
-                                        return const SizedBox(
-                                          width: 8,
-                                        );
-                                      },
-                                      itemCount: ProductsDocs.length)),
-                            ),
-                            const SizedBox(
-                              child: Text(
-                                'Sports Items',
-                                style: TextStyle(fontSize: 25),
-                              ),
-                            ),
-                            Container(
-                              height: 190,
-                              child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ListView.separated(
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, int index) {
-                                        return ItemTiles(
-                                          index: index,
-                                          press: () {},
-                                          productsData: ProductsDocs,
-                                          title: ProductsDocs[index]['title'],
-                                          donwloadURL: ProductsDocs[index]
-                                              ['downloadURL'],
-                                          price: int.parse(
-                                              ProductsDocs[index]['price']),
-                                        );
-                                      },
-                                      separatorBuilder: (context, int index) {
-                                        return const SizedBox(
-                                          width: 8,
-                                        );
-                                      },
-                                      itemCount: ProductsDocs.length)),
-                            ),
+                            // const SizedBox(
+                            //   child: Text(
+                            //     'Mobiles Items',
+                            //     style: TextStyle(fontSize: 25),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   height: 210,
+                            //   child: Padding(
+                            //       padding: const EdgeInsets.all(8.0),
+                            //       child: ListView.separated(
+                            //           scrollDirection: Axis.horizontal,
+                            //           itemBuilder: (context, int index) {
+                            //             return ItemTiles(
+                            //               index: index,
+                            //               press: () {},
+                            //               productsData: ProductsDocs,
+                            //               title: ProductsDocs[index]['title'],
+                            //               downloadURL: ProductsDocs[index]
+                            //                   ['downloadURL'],
+                            //               price: int.parse(
+                            //                   ProductsDocs[index]['price']),
+                            //             );
+                            //           },
+                            //           separatorBuilder: (context, int index) {
+                            //             return const SizedBox(
+                            //               width: 8,
+                            //             );
+                            //           },
+                            //           itemCount: ProductsDocs.length)),
+                            // ),
+                            // const SizedBox(
+                            //   child: Text(
+                            //     'Sports Items',
+                            //     style: TextStyle(fontSize: 25),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   height: 210,
+                            //   child: Padding(
+                            //       padding: const EdgeInsets.all(8.0),
+                            //       child: ListView.separated(
+                            //           scrollDirection: Axis.horizontal,
+                            //           itemBuilder: (context, int index) {
+                            //             return ItemTiles(
+                            //               index: index,
+                            //               press: () {},
+                            //               productsData: ProductsDocs,
+                            //               title: ProductsDocs[index]['title'],
+                            //               downloadURL: ProductsDocs[index]
+                            //                   ['downloadURL'],
+                            //               price: int.parse(
+                            //                   ProductsDocs[index]['price']),
+                            //             );
+                            //           },
+                            //           separatorBuilder: (context, int index) {
+                            //             return const SizedBox(
+                            //               width: 8,
+                            //             );
+                            //           },
+                            //           itemCount: ProductsDocs.length)),
+                            // ),
                           ],
                         ),
                       ),
