@@ -5,7 +5,7 @@ class Sell_Dao {
   final CollectionReference collection = FirebaseFirestore.instance
       .collection('Products')
       .doc('SubProductsCategory')
-      .collection('RecommendedItems');
+      .collection('MobileItems');
   // TODO: Add saveMessage
   void saveSellData(Sell_data selldata) {
     collection.add(selldata.toJson());

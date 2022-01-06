@@ -54,6 +54,8 @@ dependencies:
   # url launcher
   url_launcher: ^6.0.17
   store_redirect: ^2.0.0
+  #multistream manager
+  multiple_stream_builder: ^2.0.0
 
 
 dev_dependencies:
