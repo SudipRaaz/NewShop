@@ -11,18 +11,22 @@ class BuyDetail_Page extends StatelessWidget {
   BuyDetail_Page({
     Key? key,
     required this.title,
+    required this.downloadURL,
     required this.pcategory,
     required this.description,
     required this.price,
+    required this.sellerName,
+    required this.phoneNumber,
     // required this.products,
   }) : super(key: key);
   // List products;
   String title;
-  String pcategory = "category";
-  String description = "description";
+  String downloadURL;
+  String pcategory;
+  String description;
   int price;
-  String sellerName = 'seller name';
-  String phoneNumber = "9806977742";
+  String sellerName;
+  String phoneNumber;
   late Map transactionData = {};
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
