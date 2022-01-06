@@ -10,11 +10,11 @@ class ItemTiles extends StatelessWidget {
   int index = 0;
   final GestureTapCallback press;
 
-  String title = 'test';
+  String title;
   String pcategory = "test";
-  String donwloadURL = "URL";
+  String downloadURL;
   String description = "description";
-  int price = 200;
+  int price;
   String sellerName = 'seller name';
   String phoneNumber = "9806977742";
   List productsData;
@@ -25,7 +25,7 @@ class ItemTiles extends StatelessWidget {
       required this.press,
       required this.title,
       required this.price,
-      required this.donwloadURL,
+      required this.downloadURL,
       required this.productsData})
       : super(key: key);
 
@@ -51,17 +51,16 @@ class ItemTiles extends StatelessWidget {
           children: [
             Container(
               // color: Colors.red,
-              height: 130,
-              width: 130,
+              height: 150,
+              width: 150,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(Images.images[index]),
-                      fit: BoxFit.cover),
+                      image: NetworkImage("$downloadURL"), fit: BoxFit.cover),
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  color: Colors.cyanAccent),
+                  color: Colors.orange.shade200),
             ),
             Container(
-              constraints: BoxConstraints(maxWidth: 130),
+              constraints: BoxConstraints(maxWidth: 150),
               child: Padding(
                 padding: EdgeInsets.only(left: 6),
                 child: Text(

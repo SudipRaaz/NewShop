@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:second_shopp/components/Authetication/login_page.dart';
 import 'package:second_shopp/components/profile_subPages/cart_page.dart';
 import 'package:second_shopp/components/profile_subPages/selling_page.dart';
@@ -21,6 +22,8 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tabprovider = Provider.of<TabManager>(context, listen: true);
+
     CollectionReference users =
         FirebaseFirestore.instance.collection('UserData');
 
@@ -92,7 +95,7 @@ class Profile extends StatelessWidget {
                       InkWell(
                         child: Icon(Icons.logout, size: iconSize),
                         onTap: () {
-                          TabManager().goToTab(0);
+                          tabprovider.goToTab(0);
 
                           _auth.signOut();
 

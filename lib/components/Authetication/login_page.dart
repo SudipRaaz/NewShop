@@ -155,9 +155,16 @@ class _LoginPageState extends State<LoginPage> {
                             // print("current user ID : $userID");
                             User? userToken = _auth.currentUser;
                             String? userID = userToken?.uid;
-                            print("userToken = $userID");
-                            showSnackBar("Please wait ... ",
-                                const Duration(milliseconds: 1200));
+
+                            if (userID != null) {
+                              print("userToken = $userID");
+                              showSnackBar("Please wait ... ",
+                                  Duration(milliseconds: 1200));
+                            } else {
+                              showSnackBar("Check the creditial and Try again",
+                                  Duration(milliseconds: 1200));
+                            }
+                            ;
                           } catch (e) {
                             print("Error during login : $e");
                           }

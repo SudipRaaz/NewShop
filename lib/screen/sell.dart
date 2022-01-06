@@ -30,6 +30,8 @@ class _SellState extends State<Sell> {
   String downloadURL = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String? userID = '';
+  String sellerName = '';
+  String sellerPhone = '';
 
   // picking the image
 
@@ -77,6 +79,16 @@ class _SellState extends State<Sell> {
 
     // TODO: Add MessageDao
     final sellDao = Provider.of<Sell_Dao>(context, listen: false);
+
+    FirebaseFirestore.instance
+        .collection('UserData')
+        .doc(userID)
+        .snapshots()
+        .listen((event) {
+      sellerName = event.data()!['Name'];
+      sellerPhone = event.data()!['Phone'];
+      print("sellerName : $sellerName ,sellerPhone: $sellerPhone");
+    });
 
     return Scaffold(
         appBar: AppBar(
@@ -242,16 +254,19 @@ class _SellState extends State<Sell> {
                   try {
                     if (_priceController.text != null) {
                       if (_image != null) {
-                        uploadImage(_image!, sellDao);
-                        setState(() {
-                          _image = null;
-                        });
-                        showSnackBar("Product Added Sucessfully",
-                            Duration(milliseconds: 800));
+                        try {
+                          uploadImage(_image!, sellDao);
+                          setState(() {
+                            _image = null;
+                          });
+                        } catch (e) {
+                          showSnackBar(
+                              "Error : $e ", Duration(milliseconds: 800));
+                        }
                       }
                     } else {
-                      showSnackBar("Select Image and Fill all Data",
-                          Duration(milliseconds: 1200));
+                      showSnackBar(
+                          "Select Image", Duration(milliseconds: 1200));
                     }
                   } catch (e) {
                     showSnackBar("Error: $e", Duration(milliseconds: 800));
@@ -271,19 +286,23 @@ class _SellState extends State<Sell> {
 
   void _storeSellItems(Sell_Dao sellDao, downloadURL) {
     final selldata = Sell_data(
-        productID: DateTime.now().millisecondsSinceEpoch.toString(),
-        title: _titleController.text,
-        description: _descriptionController.text,
-        category: _categoryController.text,
-        price: int.parse(_priceController.text),
-        downloadURL: downloadURL,
-        UserID: userID.toString());
+      productID: DateTime.now().millisecondsSinceEpoch.toString(),
+      title: _titleController.text,
+      description: _descriptionController.text,
+      category: _categoryController.text,
+      price: int.parse(_priceController.text),
+      downloadURL: downloadURL,
+      UserID: userID.toString(),
+      sellerName: sellerName,
+      sellerPhone: sellerPhone,
+    );
     sellDao.saveSellData(selldata);
     _titleController.clear();
     _descriptionController.clear();
     _categoryController.clear();
     _priceController.clear();
     setState(() {});
+    showSnackBar("Product Added Sucessfully", Duration(milliseconds: 800));
   }
 
   showSnackBar(String snackText, Duration d) {
