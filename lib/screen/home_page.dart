@@ -147,9 +147,9 @@ class Home extends StatelessWidget {
                 IconButton(
                     onPressed: () {
                       print("ProductsDocs: $topSelling");
-                      print(snapshots.item1.data);
-                      print(snapshots.item2.data);
-                      print(snapshots.item3.data);
+                      // print(snapshots.item1.data);
+                      // print(snapshots.item2.data);
+                      // print(snapshots.item3.data);
                       {}
 
                       // Navigator.push(
@@ -263,14 +263,22 @@ class Home extends StatelessWidget {
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder: (context, int index) {
                                       return ItemTiles(
-                                        index: index,
                                         press: () {},
-                                        productsData: topSelling,
                                         title: topSelling[index]['title'],
-                                        downloadURL: topSelling[index]
-                                            ['downloadURL'],
+                                        description: topSelling[index]
+                                            ['description'],
+                                        pcategory: topSelling[index]
+                                            ['category'],
                                         price: int.parse(
                                             topSelling[index]['price']),
+                                        downloadURL: topSelling[index]
+                                            ['downloadURL'],
+                                        productID: topSelling[index]
+                                            ['productID'],
+                                        sellerName: topSelling[index]
+                                            ['sellerName'],
+                                        sellerPhone: topSelling[index]
+                                            ['sellerPhone'],
                                       );
                                     },
                                     separatorBuilder: (context, int index) {
@@ -294,14 +302,22 @@ class Home extends StatelessWidget {
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder: (context, int index) {
                                       return ItemTiles(
-                                        index: index,
                                         press: () {},
-                                        productsData: recommendedItems,
                                         title: recommendedItems[index]['title'],
-                                        downloadURL: recommendedItems[index]
-                                            ['downloadURL'],
+                                        description: recommendedItems[index]
+                                            ['description'],
+                                        pcategory: recommendedItems[index]
+                                            ['category'],
                                         price: int.parse(
                                             recommendedItems[index]['price']),
+                                        downloadURL: topSelling[index]
+                                            ['downloadURL'],
+                                        productID: recommendedItems[index]
+                                            ['productID'],
+                                        sellerName: recommendedItems[index]
+                                            ['sellerName'],
+                                        sellerPhone: recommendedItems[index]
+                                            ['sellerPhone'],
                                       );
                                     },
                                     separatorBuilder: (context, int index) {
@@ -325,14 +341,22 @@ class Home extends StatelessWidget {
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder: (context, int index) {
                                       return ItemTiles(
-                                        index: index,
                                         press: () {},
-                                        productsData: mobilesItems,
                                         title: mobilesItems[index]['title'],
-                                        downloadURL: mobilesItems[index]
-                                            ['downloadURL'],
+                                        description: mobilesItems[index]
+                                            ['description'],
+                                        pcategory: mobilesItems[index]
+                                            ['category'],
                                         price: int.parse(
                                             mobilesItems[index]['price']),
+                                        downloadURL: mobilesItems[index]
+                                            ['downloadURL'],
+                                        productID: mobilesItems[index]
+                                            ['productID'],
+                                        sellerName: mobilesItems[index]
+                                            ['sellerName'],
+                                        sellerPhone: mobilesItems[index]
+                                            ['sellerPhone'],
                                       );
                                     },
                                     separatorBuilder: (context, int index) {

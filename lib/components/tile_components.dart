@@ -7,27 +7,30 @@ import 'package:second_shopp/model/images.dart';
 
 class ItemTiles extends StatelessWidget {
   // final String imageURL;
-  int index = 0;
+
   final GestureTapCallback press;
 
   String title;
-  String pcategory = "test";
-  String downloadURL;
-  String description = "description";
+  String description;
+  String pcategory;
   int price;
-  String sellerName = 'seller name';
-  String phoneNumber = "9806977742";
-  List productsData;
+  String downloadURL;
+  String productID;
+  String sellerName;
+  String sellerPhone;
 
-  ItemTiles(
-      {Key? key,
-      required this.index,
-      required this.press,
-      required this.title,
-      required this.price,
-      required this.downloadURL,
-      required this.productsData})
-      : super(key: key);
+  ItemTiles({
+    Key? key,
+    required this.press,
+    required this.title,
+    required this.description,
+    required this.pcategory,
+    required this.price,
+    required this.downloadURL,
+    required this.productID,
+    required this.sellerName,
+    required this.sellerPhone,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +43,13 @@ class ItemTiles extends StatelessWidget {
             MaterialPageRoute(
                 builder: (context) => BuyDetail_Page(
                       title: this.title,
-                      downloadURL: this.donwloadURL,
-                      pcategory: this.pcategory,
                       description: this.description,
-                      price: price,
+                      pcategory: this.pcategory,
+                      price: this.price,
+                      downloadURL: this.downloadURL,
+                      productID: this.productID,
                       sellerName: this.sellerName,
-                      phoneNumber: this.phoneNumber,
+                      sellerPhone: this.sellerPhone,
                     )));
       },
       child: Container(

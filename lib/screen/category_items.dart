@@ -55,21 +55,10 @@ class Categorylist extends StatelessWidget {
                       downloadURL: ProductsDocs[index]['downloadURL'],
                       description: ProductsDocs[index]['description'],
                       sellerName: ProductsDocs[index]['sellerName'],
-                      phoneNumber: ProductsDocs[index]['sellerPhone'],
+                      sellerPhone: ProductsDocs[index]['sellerPhone'],
+                      productID: ProductsDocs[index]['productID'],
                     );
                   }));
         });
   }
 }
-
-/*
- List imgs = [
-    'assets/images/1.jpg',
-    'assets/images/2.jpg',
-    'assets/images/3.jpg',
-    'assets/images/4.jpg',
-    'assets/images/5.jpg',
-    'assets/images/6.jpg',
-    'assets/images/7.jpg',
-  ];
-  */

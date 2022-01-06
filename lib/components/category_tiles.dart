@@ -8,9 +8,10 @@ class categoryTiles extends StatelessWidget {
   String pcategory;
   String downloadURL;
   String description;
+  String productID = '';
   int price;
   String sellerName;
-  String phoneNumber;
+  String sellerPhone;
 
   categoryTiles({
     Key? key,
@@ -19,8 +20,9 @@ class categoryTiles extends StatelessWidget {
     required this.pcategory,
     required this.downloadURL,
     required this.description,
+    required this.productID,
     required this.sellerName,
-    required this.phoneNumber,
+    required this.sellerPhone,
   }) : super(key: key);
 
   @override
@@ -33,12 +35,13 @@ class categoryTiles extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => BuyDetail_Page(
               title: this.title,
-              downloadURL: this.downloadURL,
-              pcategory: this.pcategory,
               description: this.description,
+              pcategory: this.pcategory,
               price: this.price,
+              downloadURL: this.downloadURL,
+              productID: this.productID,
               sellerName: this.sellerName,
-              phoneNumber: this.phoneNumber,
+              sellerPhone: this.sellerPhone,
             ),
           ),
         );
@@ -53,12 +56,11 @@ class categoryTiles extends StatelessWidget {
                 // color: Colors.red,
                 height: 160,
                 width: 160,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/images/1.jpg'),
-                        fit: BoxFit.cover),
+                        image: NetworkImage("$downloadURL"), fit: BoxFit.cover),
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    color: Colors.cyanAccent),
+                    color: Colors.orange.shade200),
               ),
               Container(
                 constraints: BoxConstraints(maxWidth: 170),
@@ -73,13 +75,11 @@ class categoryTiles extends StatelessWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                // crossAxisAlignment: CrossAxisAlignment.end,
-
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 23),
                     child: Text(
-                      '$price',
+                      'Rs. $price',
                       textAlign: TextAlign.start,
                       style: TextStyle(fontSize: 14),
                     ),

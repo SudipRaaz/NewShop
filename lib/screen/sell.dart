@@ -22,7 +22,6 @@ class Sell extends StatefulWidget {
 class _SellState extends State<Sell> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
   File? _image;
@@ -32,6 +31,21 @@ class _SellState extends State<Sell> {
   String? userID = '';
   String sellerName = '';
   String sellerPhone = '';
+
+  String subCategoriesChoosen = 'Fashion';
+  List<String> subCategories = [
+    'Fashion',
+    'Electronics',
+    'fashion & Accessories',
+    'Home & Garden',
+    'Baby and toddler',
+    'Jewellery & Watches',
+    'Health & Beauty',
+    'Sports & Leisure',
+    'Toys and Games',
+    'Vehicles',
+    'Service'
+  ];
 
   // picking the image
 
@@ -198,17 +212,46 @@ class _SellState extends State<Sell> {
                         ),
                       ),
                       Container(
-                        height: 40,
-                        child: TextFormField(
-                            controller: _categoryController,
-                            textAlign: TextAlign.start,
-                            textAlignVertical: TextAlignVertical.bottom,
-                            // maxLines: 3,
-                            decoration: const InputDecoration(
-                              hintText: 'Choose Product Category',
-                              border: OutlineInputBorder(),
-                            )),
-                      ),
+                          padding: EdgeInsets.all(10),
+                          height: 40,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              border:
+                                  Border.all(color: Colors.black45, width: 1)),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: subCategoriesChoosen,
+                              icon: const Icon(Icons.arrow_downward),
+                              elevation: 16,
+                              isExpanded: true,
+                              underline: Container(
+                                height: 2,
+                              ),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  subCategoriesChoosen = newValue!;
+                                });
+                              },
+                              items: <String>[
+                                'Fashion',
+                                'Electronics',
+                                'fashion & Accessories',
+                                'Home & Garden',
+                                'Baby and toddler',
+                                'Jewellery & Watches',
+                                'Health & Beauty',
+                                'Sports & Leisure',
+                                'Toys and Games',
+                                'Vehicles',
+                                'Service'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          )),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Row(
@@ -262,6 +305,7 @@ class _SellState extends State<Sell> {
                         } catch (e) {
                           showSnackBar(
                               "Error : $e ", Duration(milliseconds: 800));
+                          print("Error: $e");
                         }
                       }
                     } else {
@@ -289,17 +333,17 @@ class _SellState extends State<Sell> {
       productID: DateTime.now().millisecondsSinceEpoch.toString(),
       title: _titleController.text,
       description: _descriptionController.text,
-      category: _categoryController.text,
+      category: subCategoriesChoosen.toString(),
       price: int.parse(_priceController.text),
       downloadURL: downloadURL,
       UserID: userID.toString(),
       sellerName: sellerName,
       sellerPhone: sellerPhone,
     );
-    sellDao.saveSellData(selldata);
+    sellDao.saveSellData(selldata, subCategoriesChoosen.toString());
     _titleController.clear();
     _descriptionController.clear();
-    _categoryController.clear();
+    // _categoryController.clear();
     _priceController.clear();
     setState(() {});
     showSnackBar("Product Added Sucessfully", Duration(milliseconds: 800));

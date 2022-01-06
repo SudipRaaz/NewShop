@@ -11,22 +11,24 @@ class BuyDetail_Page extends StatelessWidget {
   BuyDetail_Page({
     Key? key,
     required this.title,
-    required this.downloadURL,
-    required this.pcategory,
     required this.description,
+    required this.pcategory,
     required this.price,
+    required this.downloadURL,
+    required this.productID,
     required this.sellerName,
-    required this.phoneNumber,
-    // required this.products,
+    required this.sellerPhone,
   }) : super(key: key);
-  // List products;
+
   String title;
   String downloadURL;
   String pcategory;
   String description;
+  String productID;
   int price;
   String sellerName;
-  String phoneNumber;
+  String sellerPhone;
+
   late Map transactionData = {};
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -38,7 +40,7 @@ class BuyDetail_Page extends StatelessWidget {
     userID = userToken?.uid;
     print("userToken = $userID");
 
-    String sellerNumber = '+977$phoneNumber';
+    String sellerNumber = '+977$sellerPhone';
 
     final transactionDao = Provider.of<Transaction_Dao>(context, listen: false);
 
@@ -57,6 +59,9 @@ class BuyDetail_Page extends StatelessWidget {
                         height: 250,
                         width: double.infinity,
                         decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage("$downloadURL"),
+                              fit: BoxFit.cover),
                           color: Colors.orange.shade300,
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                           boxShadow: [
@@ -100,8 +105,8 @@ class BuyDetail_Page extends StatelessWidget {
                               CircleAvatar(
                                   radius: 28,
                                   backgroundColor: Colors.orange.shade400,
-                                  backgroundImage: const NetworkImage(
-                                      "https://firebasestorage.googleapis.com/v0/b/secondshopp-f510b.appspot.com/o/DefaultPictures%2Fuser.png?alt=media&token=0a4f1565-673e-4953-b087-3b6ed584afb6")),
+                                  backgroundImage:
+                                      NetworkImage(downloadURL.toString())),
                               const SizedBox(
                                 width: 10,
                               ),
@@ -109,13 +114,13 @@ class BuyDetail_Page extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "$sellerName",
+                                    sellerName,
                                     style: TextStyle(
                                         fontSize: 23,
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
-                                    'Contact: $phoneNumber',
+                                    'Contact: $sellerPhone',
                                     style: TextStyle(fontSize: 16),
                                   )
                                 ],
