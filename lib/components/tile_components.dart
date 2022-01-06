@@ -39,10 +39,14 @@ class ItemTiles extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => BuyDetail_Page(
-                    title: title,
-                    pcategory: this.pcategory,
-                    description: this.description,
-                    price: price)));
+                      title: this.title,
+                      downloadURL: this.donwloadURL,
+                      pcategory: this.pcategory,
+                      description: this.description,
+                      price: price,
+                      sellerName: this.sellerName,
+                      phoneNumber: this.phoneNumber,
+                    )));
       },
       child: Container(
         // color: Colors.redAccent,
