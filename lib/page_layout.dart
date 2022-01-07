@@ -1,9 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:second_shopp/screen/category_page.dart';
 
 import 'package:second_shopp/screen/home_page.dart';
-import 'package:second_shopp/screen/inbox.dart';
+import 'package:second_shopp/screen/notification_page.dart';
 import 'package:second_shopp/screen/profile.dart';
 import 'package:second_shopp/screen/sell.dart';
 
@@ -21,7 +22,7 @@ class _PageLayoutState extends State<PageLayout> {
     Home(),
     Category(),
     Sell(),
-    Inbox(),
+    Notification_page(),
     Profile(),
   ];
 
@@ -55,7 +56,7 @@ class _PageLayoutState extends State<PageLayout> {
               ),
               BottomNavigationBarItem(
                 backgroundColor: Colors.orange.shade400,
-                icon: const Icon(Icons.chat),
+                icon: const Icon(Icons.notifications),
                 label: 'Inbox',
               ),
               BottomNavigationBarItem(

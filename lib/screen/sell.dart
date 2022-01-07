@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -21,12 +22,30 @@ class Sell extends StatefulWidget {
 class _SellState extends State<Sell> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
   File? _image;
   final imagePicker = ImagePicker();
-  String? downloadURL;
+  String downloadURL = '';
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? userID = '';
+  String sellerName = '';
+  String sellerPhone = '';
+
+  String subCategoriesChoosen = 'Fashion';
+  List<String> subCategories = [
+    'Fashion',
+    'Electronics',
+    'fashion & Accessories',
+    'Home & Garden',
+    'Baby and toddler',
+    'Jewellery & Watches',
+    'Health & Beauty',
+    'Sports & Leisure',
+    'Toys and Games',
+    'Vehicles',
+    'Service'
+  ];
 
   // picking the image
 
@@ -42,28 +61,48 @@ class _SellState extends State<Sell> {
   }
 
   // uploading the image to firebase cloudstore
-  Future uploadImage(File _image) async {
-    final imgId = DateTime.now().millisecondsSinceEpoch.toString();
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    Reference reference =
-        FirebaseStorage.instance.ref().child('Images').child("post_$imgId");
+  Future uploadImage(File _image, sellDao) async {
+    try {
+      final imgId = DateTime.now().millisecondsSinceEpoch.toString();
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      Reference reference = FirebaseStorage.instance
+          .ref()
+          .child('ProductImages')
+          .child("post_$imgId");
 
-    await reference.putFile(_image);
-    downloadURL = await reference.getDownloadURL();
+      await reference.putFile(_image);
+      downloadURL = await reference.getDownloadURL();
 
-    // cloud firestore
-    await firebaseFirestore
-        .collection("users")
-        .doc()
-        .collection("images")
-        .add({'downloadURL': downloadURL}).whenComplete(
-            () => showSnackBar("Image Uploaded", Duration(seconds: 2)));
+      // cloud firestore
+      // await firebaseFirestore.collection("Products")
+      //     // .doc()
+      //     // .collection("Images")
+      //     .add({'downloadURL': downloadURL}).whenComplete(
+      //         () => showSnackBar("Image Uploaded", Duration(seconds: 2)));
+      _storeSellItems(sellDao, downloadURL);
+    } catch (e) {
+      showSnackBar("Error: $e", Duration(seconds: 5));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    User? userToken = _auth.currentUser;
+    userID = userToken?.uid;
+    print("userToken = $userID");
+
     // TODO: Add MessageDao
     final sellDao = Provider.of<Sell_Dao>(context, listen: false);
+
+    FirebaseFirestore.instance
+        .collection('UserData')
+        .doc(userID)
+        .snapshots()
+        .listen((event) {
+      sellerName = event.data()!['Name'];
+      sellerPhone = event.data()!['Phone'];
+      print("sellerName : $sellerName ,sellerPhone: $sellerPhone");
+    });
 
     return Scaffold(
         appBar: AppBar(
@@ -120,21 +159,8 @@ class _SellState extends State<Sell> {
                       ),
                     ),
                   ],
-                )
-                // ListView(
-                //   scrollDirection: Axis.horizontal,
-                //   children: const [
-                //     SizedBox(
-                //       width: 15,
-                //     ),
-                //     ImageBox(),
-                //     ImageBox(),
-                //     ImageBox(),
-                //     ImageBox(),
-                //   ],
-                // ),
-                ),
-            SizedBox(
+                )),
+            const SizedBox(
               height: 5,
             ),
             Padding(
@@ -143,7 +169,7 @@ class _SellState extends State<Sell> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Title :  ',
                         style: TextStyle(fontSize: 25),
                       ),
@@ -153,12 +179,12 @@ class _SellState extends State<Sell> {
                             controller: _titleController,
                             textAlign: TextAlign.start,
                             textAlignVertical: TextAlignVertical.bottom,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Enter Product Name',
                               border: OutlineInputBorder(),
                             )),
                       ),
-                      Padding(
+                      const Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: SizedBox(
                           child: Text('Description : ',
@@ -186,17 +212,46 @@ class _SellState extends State<Sell> {
                         ),
                       ),
                       Container(
-                        height: 40,
-                        child: TextFormField(
-                            controller: _categoryController,
-                            textAlign: TextAlign.start,
-                            textAlignVertical: TextAlignVertical.bottom,
-                            // maxLines: 3,
-                            decoration: const InputDecoration(
-                              hintText: 'Choose Product Category',
-                              border: OutlineInputBorder(),
-                            )),
-                      ),
+                          padding: EdgeInsets.all(10),
+                          height: 40,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              border:
+                                  Border.all(color: Colors.black45, width: 1)),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: subCategoriesChoosen,
+                              icon: const Icon(Icons.arrow_downward),
+                              elevation: 16,
+                              isExpanded: true,
+                              underline: Container(
+                                height: 2,
+                              ),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  subCategoriesChoosen = newValue!;
+                                });
+                              },
+                              items: <String>[
+                                'Fashion',
+                                'Electronics',
+                                'fashion & Accessories',
+                                'Home & Garden',
+                                'Baby and toddler',
+                                'Jewellery & Watches',
+                                'Health & Beauty',
+                                'Sports & Leisure',
+                                'Toys and Games',
+                                'Vehicles',
+                                'Service'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          )),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Row(
@@ -235,30 +290,33 @@ class _SellState extends State<Sell> {
               height: 50,
               width: 150,
               child: MaterialButton(
-                padding: EdgeInsets.all(3),
+                padding: const EdgeInsets.all(3),
                 color: Colors.orange.shade400,
                 // style: const ButtonStyle(),
                 onPressed: () {
                   try {
                     if (_priceController.text != null) {
                       if (_image != null) {
-                        _storeSellItems(sellDao);
-                        uploadImage(_image!);
-                        setState(() {
-                          _image = null;
-                        });
-                        showSnackBar("Product Added Sucessfully",
-                            Duration(milliseconds: 800));
+                        try {
+                          uploadImage(_image!, sellDao);
+                          setState(() {
+                            _image = null;
+                          });
+                        } catch (e) {
+                          showSnackBar(
+                              "Error : $e ", Duration(milliseconds: 800));
+                          print("Error: $e");
+                        }
                       }
                     } else {
                       showSnackBar(
-                          "Select Image first", Duration(milliseconds: 800));
+                          "Select Image", Duration(milliseconds: 1200));
                     }
                   } catch (e) {
                     showSnackBar("Error: $e", Duration(milliseconds: 800));
                   }
                 },
-                child: Center(
+                child: const Center(
                   child: Text(
                     'Sell it',
                     style: TextStyle(fontSize: 25),
@@ -270,53 +328,26 @@ class _SellState extends State<Sell> {
         ]));
   }
 
-  void _storeSellItems(Sell_Dao sellDao) {
+  void _storeSellItems(Sell_Dao sellDao, downloadURL) {
     final selldata = Sell_data(
       productID: DateTime.now().millisecondsSinceEpoch.toString(),
       title: _titleController.text,
       description: _descriptionController.text,
-      category: _categoryController.text,
+      category: subCategoriesChoosen.toString(),
       price: int.parse(_priceController.text),
+      downloadURL: downloadURL,
+      UserID: userID.toString(),
+      sellerName: sellerName,
+      sellerPhone: sellerPhone,
     );
-    sellDao.saveSellData(selldata);
+    sellDao.saveSellData(selldata, subCategoriesChoosen.toString());
     _titleController.clear();
     _descriptionController.clear();
-    _categoryController.clear();
+    // _categoryController.clear();
     _priceController.clear();
     setState(() {});
+    showSnackBar("Product Added Sucessfully", Duration(milliseconds: 800));
   }
-
-  // uploadImage() async {
-  //   final _storage = FirebaseStorage.instance;
-  //   var image;
-
-  //   //Check Permissions
-  //   await Permission.photos.request();
-
-  //   var permissionStatus = await Permission.photos.status;
-
-  //   if (permissionStatus.isGranted){
-  //     //Select Image
-  //     image = await _picker.getImage(source: ImageSource.gallery);
-  //     var file = File(image.path);
-
-  //     if (image != null){
-  //       //Upload to Firebase
-  //       var snapshot = await _storage.ref()
-  //       .child('folderName/imageName')
-  //       .putFile(file);
-
-  //       var downloadUrl = await snapshot.ref.getDownloadURL();
-
-  //     } else {
-  //       print('No Path Received');
-  //     }
-
-  //   } else {
-  //     print('Grant Permissions and try again');
-  //   }
-
-  // }
 
   showSnackBar(String snackText, Duration d) {
     final snackBar = SnackBar(content: Text(snackText), duration: d);

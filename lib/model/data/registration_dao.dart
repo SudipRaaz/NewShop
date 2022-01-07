@@ -3,10 +3,10 @@ import 'registration_data.dart';
 
 class Registration_Dao {
   final CollectionReference collection =
-      FirebaseFirestore.instance.collection('user data');
+      FirebaseFirestore.instance.collection('UserData');
 
-  void saveUser(Registration registration) {
-    collection.add(registration.toJson());
+  void saveUser(Registration registration, userID) {
+    collection.doc(userID).set(registration.toJson());
   }
 
   Stream<QuerySnapshot> getUserData() {
