@@ -24,6 +24,7 @@ class Category extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.orange.shade400,
         title: Text("Categories"),
       ),
       body: ListView.builder(
@@ -32,8 +33,14 @@ class Category extends StatelessWidget {
           return ListTile(
             title: GestureDetector(
                 onTap: () {
-                  Navigator.push((context),
-                      MaterialPageRoute(builder: (context) => Categorylist()));
+                  String categoryName = entries[index].toString();
+                  Navigator.push(
+                      (context),
+                      MaterialPageRoute(
+                          builder: (context) => Categorylist(
+                                categoryName: categoryName,
+                              )));
+                  print('pressed on : $categoryName');
                   print('hello text tapped');
                 },
                 child: Text('${entries[index]}')),

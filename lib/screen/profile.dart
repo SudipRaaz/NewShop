@@ -38,7 +38,7 @@ class Profile extends StatelessWidget {
           return const Text("Something went wrong");
         }
 
-        if (snapshot.hasData && !snapshot.data!.exists) {
+        if (!snapshot.hasData) {
           return const Text("Document does not exist");
         }
 

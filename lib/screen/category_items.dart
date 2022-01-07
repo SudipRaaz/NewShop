@@ -4,7 +4,8 @@ import 'package:second_shopp/components/category_tiles.dart';
 import 'package:second_shopp/model/images.dart';
 
 class Categorylist extends StatelessWidget {
-  Categorylist({Key? key}) : super(key: key);
+  Categorylist({Key? key, required this.categoryName}) : super(key: key);
+  String categoryName;
 
   final List ProductsDocs = [];
 
@@ -14,7 +15,7 @@ class Categorylist extends StatelessWidget {
         .collection('Products')
         // .where('title', isEqualTo: 'product 1')
         .doc('SubProductsCategory')
-        .collection('PopularItems')
+        .collection(categoryName)
         .snapshots();
 
     return StreamBuilder<QuerySnapshot>(
@@ -41,7 +42,9 @@ class Categorylist extends StatelessWidget {
           }).toList();
 
           return Scaffold(
-              appBar: AppBar(title: Text("Categories")),
+              appBar: AppBar(
+                  title: Text(categoryName),
+                  backgroundColor: Colors.orange.shade400),
               body: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
