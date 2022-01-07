@@ -8,7 +8,7 @@ class categoryTiles extends StatelessWidget {
   String pcategory;
   String downloadURL;
   String description;
-  String productID = '';
+  String productID;
   int price;
   String sellerName;
   String sellerPhone;
@@ -54,7 +54,7 @@ class categoryTiles extends StatelessWidget {
             children: [
               Container(
                 // color: Colors.red,
-                height: 160,
+                height: 150,
                 width: 160,
                 decoration: BoxDecoration(
                     image: DecorationImage(
@@ -63,6 +63,7 @@ class categoryTiles extends StatelessWidget {
                     color: Colors.orange.shade200),
               ),
               Container(
+                alignment: Alignment.centerLeft,
                 constraints: BoxConstraints(maxWidth: 170),
                 child: Padding(
                   padding: EdgeInsets.only(left: 6),
