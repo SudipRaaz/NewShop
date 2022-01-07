@@ -56,7 +56,8 @@ dependencies:
   store_redirect: ^2.0.0
   #multistream manager
   multiple_stream_builder: ^2.0.0
-
+  #application rating 
+  flutter_rating_bar: ^4.0.0
 
 dev_dependencies:
   flutter_test:

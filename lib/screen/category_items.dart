@@ -13,7 +13,6 @@ class Categorylist extends StatelessWidget {
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> ProductStream = FirebaseFirestore.instance
         .collection('Products')
-        // .where('title', isEqualTo: 'product 1')
         .doc('SubProductsCategory')
         .collection(categoryName)
         .snapshots();

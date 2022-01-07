@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:second_shopp/components/Authetication/login_page.dart';
 import 'package:second_shopp/components/profile_subPages/cart_page.dart';
@@ -9,6 +11,7 @@ import 'package:second_shopp/components/profile_subPages/watching_page.dart';
 import 'package:second_shopp/components/profile_tile.dart';
 import 'package:second_shopp/components/profile_subPages/buy_Item.dart';
 import 'package:second_shopp/model/tab_manager.dart';
+import 'package:store_redirect/store_redirect.dart';
 
 class Profile extends StatelessWidget {
   Profile({Key? key}) : super(key: key);
@@ -19,6 +22,9 @@ class Profile extends StatelessWidget {
 
   String? documentId = '';
   double iconSize = 50;
+  late double rating = 4;
+
+  bool isVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +56,90 @@ class Profile extends StatelessWidget {
               child: SingleChildScrollView(
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
-                // color: Colors.cyanAccent,
                 child: Column(children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      InkWell(
+                        child: Icon(Icons.dashboard_customize_rounded,
+                            size: iconSize),
+                        onTap: () {
+                          // showDialog(
+                          //     context: context,
+                          //     builder: (BuildContext context) {
+                          //       return const AlertDialog(
+                          //         content: Text('Alert!'),
+                          //         shape: RoundedRectangleBorder(
+                          //             borderRadius: BorderRadius.all(
+                          //                 Radius.circular(2.0))),
+                          //       );
+                          //     });
+                          showCupertinoDialog<void>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                CupertinoAlertDialog(
+                              title: const Text(
+                                'App Rating',
+                                style: TextStyle(fontSize: 25),
+                              ),
+                              content: Column(
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Please rate our application',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  RatingBar.builder(
+                                      itemCount: 5,
+                                      initialRating: 4,
+                                      minRating: 1,
+                                      glowColor: Colors.orange.shade200,
+                                      itemBuilder: (context, _) => const Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                          ),
+                                      onRatingUpdate: (value) {
+                                        rating = value;
+                                      }),
+                                  Visibility(
+                                      child: Column(
+                                    children: [
+                                      Text(''),
+                                    ],
+                                  )
+                                      // visible: isVisible,
+                                      ),
+                                ],
+                              ),
+                              actions: <CupertinoDialogAction>[
+                                CupertinoDialogAction(
+                                  child: const Text('later'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                CupertinoDialogAction(
+                                  child: const Text('Yes'),
+                                  onPressed: () {
+                                    print('Rating given: $rating');
+                                    if (rating > 3) {
+                                      StoreRedirect.redirect(
+                                          androidAppId:
+                                              'com.shambhug.myapplication');
+                                    }
+                                  },
+                                )
+                              ],
+                            ),
+                          );
+                          print('rating pressed');
+                        },
+                        radius: 20,
+                        splashColor: Colors.amberAccent,
+                      ),
+                      Spacer(),
                       InkWell(
                         child: Icon(Icons.share, size: iconSize),
                         onTap: () {
@@ -224,7 +309,7 @@ class Profile extends StatelessWidget {
         }
         ;
 
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -286,6 +371,18 @@ class Profile extends StatelessWidget {
     //         return Text("Full Name: ${data['full_name']} ${data['last_name']}");
     //       }
     //     });
+  }
+
+  Future<dynamic> showDialogBox(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(2.0))),
+            child: Container(),
+          );
+        });
   }
 
   // _getImage() async {
