@@ -115,7 +115,7 @@ class BuyDetail_Page extends StatelessWidget {
                                 children: [
                                   Text(
                                     sellerName,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 23,
                                         fontWeight: FontWeight.w400),
                                   ),
@@ -294,7 +294,8 @@ class RowData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "$title: ",

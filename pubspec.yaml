@@ -58,6 +58,9 @@ dependencies:
   multiple_stream_builder: ^2.0.0
   #application rating 
   flutter_rating_bar: ^4.0.0
+  #managing notification
+  firebase_messaging: ^11.2.5
+  flutter_local_notifications: ^9.2.0
 
 dev_dependencies:
   flutter_test:
