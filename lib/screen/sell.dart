@@ -119,8 +119,7 @@ class _SellState extends State<Sell> {
                         height: 300,
                         width: 350,
                         decoration: const BoxDecoration(
-                            // image: DecorationImage(image: AssetImage('ass')),
-                            color: Colors.amberAccent,
+                            color: Color.fromARGB(255, 253, 183, 77),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(15))),
                         child: _image != null

@@ -24,7 +24,7 @@ class Home extends StatelessWidget {
   // List ProductsDocs = [];
   List topSelling = [];
   List recommendedItems = [];
-  List mobilesItems = [];
+  List featuredItems = [];
 
   // void popularItems() {
   //   FirebaseFirestore.instance
@@ -69,7 +69,7 @@ class Home extends StatelessWidget {
       builder: (context, snapshots) {
         topSelling = [];
         recommendedItems = [];
-        mobilesItems = [];
+        featuredItems = [];
 
         if (!snapshots.item1.hasData) {
           return const Center(
@@ -98,7 +98,7 @@ class Home extends StatelessWidget {
         }).toList();
         snapshots.item3.data!.docs.map((DocumentSnapshot document) {
           Map productdata = document.data() as Map<String, dynamic>;
-          mobilesItems.add(productdata);
+          featuredItems.add(productdata);
           // a['id'] = document.id;
         }).toList();
         // return StreamBuilder<QuerySnapshot>(
@@ -251,6 +251,45 @@ class Home extends StatelessWidget {
                         children: [
                           const SizedBox(
                             child: Text(
+                              'Featured Items',
+                              style: TextStyle(fontSize: 25),
+                            ),
+                          ),
+                          Container(
+                            height: 210,
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, int index) {
+                                      return ItemTiles(
+                                        press: () {},
+                                        title: featuredItems[index]['title'],
+                                        description: featuredItems[index]
+                                            ['description'],
+                                        pcategory: featuredItems[index]
+                                            ['category'],
+                                        price: int.parse(
+                                            featuredItems[index]['price']),
+                                        downloadURL: featuredItems[index]
+                                            ['downloadURL'],
+                                        productID: featuredItems[index]
+                                            ['productID'],
+                                        sellerName: featuredItems[index]
+                                            ['sellerName'],
+                                        sellerPhone: featuredItems[index]
+                                            ['sellerPhone'],
+                                      );
+                                    },
+                                    separatorBuilder: (context, int index) {
+                                      return const SizedBox(
+                                        width: 8,
+                                      );
+                                    },
+                                    itemCount: featuredItems.length)),
+                          ),
+                          const SizedBox(
+                            child: Text(
                               'Top Selling',
                               style: TextStyle(fontSize: 25),
                             ),
@@ -327,45 +366,7 @@ class Home extends StatelessWidget {
                                     },
                                     itemCount: recommendedItems.length)),
                           ),
-                          const SizedBox(
-                            child: Text(
-                              'Mobiles Items',
-                              style: TextStyle(fontSize: 25),
-                            ),
-                          ),
-                          Container(
-                            height: 210,
-                            child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ListView.separated(
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, int index) {
-                                      return ItemTiles(
-                                        press: () {},
-                                        title: mobilesItems[index]['title'],
-                                        description: mobilesItems[index]
-                                            ['description'],
-                                        pcategory: mobilesItems[index]
-                                            ['category'],
-                                        price: int.parse(
-                                            mobilesItems[index]['price']),
-                                        downloadURL: mobilesItems[index]
-                                            ['downloadURL'],
-                                        productID: mobilesItems[index]
-                                            ['productID'],
-                                        sellerName: mobilesItems[index]
-                                            ['sellerName'],
-                                        sellerPhone: mobilesItems[index]
-                                            ['sellerPhone'],
-                                      );
-                                    },
-                                    separatorBuilder: (context, int index) {
-                                      return const SizedBox(
-                                        width: 8,
-                                      );
-                                    },
-                                    itemCount: mobilesItems.length)),
-                          ),
+
                           // const SizedBox(
                           //   child: Text(
                           //     'Sports Items',

@@ -351,8 +351,10 @@ class _ProfileTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 30),
         height: 80,
         decoration: BoxDecoration(
-            border: Border.all(),
-            borderRadius: const BorderRadius.all(Radius.circular(12))),
+          color: Colors.orange.shade300,
+          border: Border.all(),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

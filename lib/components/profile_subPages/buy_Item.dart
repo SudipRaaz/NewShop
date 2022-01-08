@@ -263,7 +263,6 @@ class BuyDetail_Page extends StatelessWidget {
               actions: [
                 FlatButton(
                   // FlatButton widget is used to make a text to work like a button
-                  textColor: Colors.black,
                   onPressed: () {
                     Navigator.pop(context);
                   }, // function used to perform after pressing the button
