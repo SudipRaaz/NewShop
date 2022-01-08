@@ -13,18 +13,26 @@ import 'package:second_shopp/components/profile_subPages/buy_Item.dart';
 import 'package:second_shopp/model/tab_manager.dart';
 import 'package:store_redirect/store_redirect.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   Profile({Key? key}) : super(key: key);
 
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
   final _auth = FirebaseAuth.instance;
 
   // String profileImg = '';
-
   String? documentId = '';
+
   double iconSize = 50;
+
   late double rating = 4;
 
   bool isVisible = false;
+
+  String customerCare = 'assets/images/black_customerCare.png';
 
   @override
   Widget build(BuildContext context) {
@@ -57,141 +65,128 @@ class Profile extends StatelessWidget {
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Column(children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        child: Icon(Icons.dashboard_customize_rounded,
-                            size: iconSize),
-                        onTap: () {
-                          // showDialog(
-                          //     context: context,
-                          //     builder: (BuildContext context) {
-                          //       return const AlertDialog(
-                          //         content: Text('Alert!'),
-                          //         shape: RoundedRectangleBorder(
-                          //             borderRadius: BorderRadius.all(
-                          //                 Radius.circular(2.0))),
-                          //       );
-                          //     });
-                          showCupertinoDialog<void>(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                CupertinoAlertDialog(
-                              title: const Text(
-                                'App Rating',
-                                style: TextStyle(fontSize: 25),
-                              ),
-                              content: Column(
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Please rate our application',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  RatingBar.builder(
-                                      itemCount: 5,
-                                      initialRating: 4,
-                                      minRating: 1,
-                                      glowColor: Colors.orange.shade200,
-                                      itemBuilder: (context, _) => const Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                          ),
-                                      onRatingUpdate: (value) {
-                                        rating = value;
-                                      }),
-                                  Visibility(
-                                      child: Column(
-                                    children: [
-                                      Text(''),
-                                    ],
-                                  )
-                                      // visible: isVisible,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          child: Container(
+                              width: 60,
+                              height: 60,
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/review_logo.png')))),
+                          onTap: () {
+                            showCupertinoDialog<void>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  CupertinoAlertDialog(
+                                title: const Text(
+                                  'App Rating',
+                                  style: TextStyle(fontSize: 25),
+                                ),
+                                content: Column(
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Please rate our application',
+                                        style: TextStyle(fontSize: 18),
                                       ),
+                                    ),
+                                    RatingBar.builder(
+                                        itemCount: 5,
+                                        initialRating: 4,
+                                        minRating: 1,
+                                        glowColor: Colors.orange.shade200,
+                                        itemBuilder: (context, _) => const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                        onRatingUpdate: (value) {
+                                          rating = value;
+                                        }),
+                                  ],
+                                ),
+                                actions: <CupertinoDialogAction>[
+                                  CupertinoDialogAction(
+                                    child: const Text('later'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  CupertinoDialogAction(
+                                    child: const Text('Yes'),
+                                    onPressed: () {
+                                      print('Rating given: $rating');
+                                      if (rating > 3) {
+                                        StoreRedirect.redirect(
+                                            androidAppId:
+                                                'com.shambhug.myapplication');
+                                      } else {
+                                        setState(() {
+                                          isVisible = true;
+                                          customerCare =
+                                              'assets/images/green_customerCare.png';
+                                        });
+                                      }
+                                      Navigator.pop(context);
+                                    },
+                                  )
                                 ],
                               ),
-                              actions: <CupertinoDialogAction>[
-                                CupertinoDialogAction(
-                                  child: const Text('later'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                CupertinoDialogAction(
-                                  child: const Text('Yes'),
-                                  onPressed: () {
-                                    print('Rating given: $rating');
-                                    if (rating > 3) {
-                                      StoreRedirect.redirect(
-                                          androidAppId:
-                                              'com.shambhug.myapplication');
-                                    }
-                                  },
-                                )
-                              ],
+                            );
+                            print('rating pressed');
+                          },
+                          radius: 20,
+                          splashColor: Colors.amberAccent,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        InkWell(
+                          child: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(customerCare)))),
+                          onTap: () {},
+                          radius: 20,
+                          splashColor: Colors.amberAccent,
+                        ),
+                        Visibility(
+                            visible: isVisible,
+                            child: const Text(
+                              'Customer\nSupport',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w800, fontSize: 17),
+                            )
+                            // visible: isVisible,
                             ),
-                          );
-                          print('rating pressed');
-                        },
-                        radius: 20,
-                        splashColor: Colors.amberAccent,
-                      ),
-                      Spacer(),
-                      InkWell(
-                        child: Icon(Icons.share, size: iconSize),
-                        onTap: () {
-                          // showDialog(
-                          //     context: context,
-                          //     builder: (BuildContext context) {
-                          //       return const AlertDialog(
-                          //         content: Text('Alert!'),
-                          //         shape: RoundedRectangleBorder(
-                          //             borderRadius: BorderRadius.all(
-                          //                 Radius.circular(2.0))),
-                          //       );
-                          //     });
-                          User? userToken = _auth.currentUser;
-                          String? userID = userToken?.uid;
-                          String date = DateTime.now().minute.toString();
-                          String date2 = DateTime.now().hour.toString();
-                          String date3 = DateTime.now().toString();
-                          print("date min = $date");
-                          print("date hour = $date2");
-                          print("date hour = $date3");
-                        },
-                        radius: 20,
-                        splashColor: Colors.amberAccent,
-                      ),
-                      InkWell(
-                        child: Icon(Icons.settings, size: iconSize),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const CartItems()));
-                        },
-                        radius: 20,
-                        splashColor: Colors.amberAccent,
-                        // highlightColor:
-                      ),
-                      InkWell(
-                        child: Icon(Icons.logout, size: iconSize),
-                        onTap: () {
-                          tabprovider.goToTab(0);
+                        const Spacer(),
+                        InkWell(
+                          child: Icon(
+                            Icons.logout,
+                            size: iconSize,
+                            color: Colors.redAccent,
+                          ),
+                          onTap: () {
+                            tabprovider.goToTab(0);
 
-                          _auth.signOut();
+                            _auth.signOut();
 
-                          // Navigator.of(context).pushReplacement(
-                          //     MaterialPageRoute(builder: (context) => LoginPage()));
-                        },
-                        radius: 20,
-                        splashColor: Colors.amberAccent,
-                        // highlightColor:
-                      ),
-                    ],
+                            // Navigator.of(context).pushReplacement(
+                            //     MaterialPageRoute(builder: (context) => LoginPage()));
+                          },
+                          radius: 20,
+                          splashColor: Colors.amberAccent,
+                          // highlightColor:
+                        ),
+                      ],
+                    ),
                   ),
                   // const SizedBox(
                   //   height: 20,
@@ -228,10 +223,16 @@ class Profile extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                " ${data['Name']}",
-                                style: const TextStyle(
-                                    fontSize: 25, fontWeight: FontWeight.bold),
+                              Container(
+                                constraints: BoxConstraints(maxWidth: 200),
+                                child: Text(
+                                  " ${data['Name']}",
+                                  // 'sudip raj adhikari form chitwan',
+                                  maxLines: 1,
+                                  style: const TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                               Padding(
                                 padding:
@@ -240,11 +241,16 @@ class Profile extends StatelessWidget {
                                   children: [
                                     const Text("   contact: ",
                                         style: TextStyle(fontSize: 15)),
-                                    Text(
-                                      "${data['Phone']}",
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
+                                    Container(
+                                      constraints:
+                                          BoxConstraints(maxWidth: 200),
+                                      child: Text(
+                                        "${data['Phone']}",
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -253,11 +259,15 @@ class Profile extends StatelessWidget {
                                 children: [
                                   const Text(" Email: ",
                                       style: TextStyle(fontSize: 15)),
-                                  Text(
-                                    "${data['email']}",
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
+                                  Container(
+                                    constraints: BoxConstraints(maxWidth: 200),
+                                    child: Text(
+                                      "${data['email']}",
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -314,63 +324,6 @@ class Profile extends StatelessWidget {
         );
       },
     );
-
-    // FirebaseFirestore.instance
-    //     .collection('user data')
-    //     .get()
-    //     .then((QuerySnapshot querySnapshot) {
-    //   querySnapshot.docs.forEach((doc) {
-    //     setState(() {
-    //       username = doc['Name'];
-    //       userPhone = doc['Phone'];
-    //     });
-    //   });
-    // }
-    // );
-//************************************************************************************************* */
-    // FirebaseFirestore.instance
-    //     .collection('UserData')
-    //     .doc('j8iuhBWwzct6U0OEpP0X')
-    //     .get(),
-    //     Builder
-    //     {
-    //   if (documentSnapshot.exists) {
-    //     print('Document data: ${documentSnapshot.data()}');
-    //     Map<String, dynamic> userData =
-    //         documentSnapshot.data() as Map<String, dynamic>;
-    //     setState(() {
-    //       username = userData['Name'];
-    //       userPhone = userData['Phone'];
-    //     });
-    //   } else {
-    //     print('Document does not exist on the database');
-    //   }
-    // });
-
-    // CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-    // FutureBuilder<DocumentSnapshot>(
-    //     future: users.doc('O3sY4JCTLKVJwPdesJDJ').get(),
-    //     builder:
-    //         (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //       if (snapshot.hasError) {
-    //         return Text("Something went wrong");
-    //       }
-
-    //       if (snapshot.hasData && !snapshot.data!.exists) {
-    //         return Text("Document does not exist");
-    //       }
-
-    //       if (snapshot.connectionState == ConnectionState.done) {
-    //         Map<String, dynamic> data =
-    //             snapshot.data!.data() as Map<String, dynamic>;
-    //         // setState(() {
-    //         //   username = data['Name'];
-    //         //   userPhone = data['Phone'];
-    //         // });
-    //         return Text("Full Name: ${data['full_name']} ${data['last_name']}");
-    //       }
-    //     });
   }
 
   Future<dynamic> showDialogBox(BuildContext context) {
@@ -384,26 +337,6 @@ class Profile extends StatelessWidget {
           );
         });
   }
-
-  // _getImage() async {
-  //   // var collection = FirebaseFirestore.instance.collection('image1');
-  //   // var querySnapshot = await collection.get();
-  //   // for (var queryDocumentSnapshot in querySnapshot.docs) {
-  //   //   Map<String, dynamic> data = queryDocumentSnapshot.data();
-  //   //   var name = data['name'];
-  //   //   var phone = data['phone'];
-  //   // }
-
-  //   FirebaseFirestore.instance
-  //       .collection('DefaultData')
-  //       .doc()
-  //       .snapshots()
-  //       .listen((event) {
-  //     setState(() {
-  //       profileImg = event.data()!['image1'];
-  //     });
-  //   });
-  // }
 }
 
 class _ProfileTile extends StatelessWidget {

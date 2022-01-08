@@ -46,7 +46,7 @@ class _PageLayoutState extends State<PageLayout> {
               ),
               BottomNavigationBarItem(
                 backgroundColor: Colors.orange.shade400,
-                icon: const Icon(Icons.category),
+                icon: const Icon(Icons.dashboard_rounded),
                 label: 'Category',
               ),
               BottomNavigationBarItem(
