@@ -33,19 +33,6 @@ class _SellState extends State<Sell> {
   String sellerPhone = '';
 
   String subCategoriesChoosen = 'Fashion';
-  List<String> subCategories = [
-    'Fashion',
-    'Electronics',
-    'fashion & Accessories',
-    'Home & Garden',
-    'Baby and toddler',
-    'Jewellery & Watches',
-    'Health & Beauty',
-    'Sports & Leisure',
-    'Toys and Games',
-    'Vehicles',
-    'Service'
-  ];
 
   // picking the image
 
@@ -299,9 +286,6 @@ class _SellState extends State<Sell> {
                       if (_image != null) {
                         try {
                           uploadImage(_image!, sellDao);
-                          setState(() {
-                            _image = null;
-                          });
                         } catch (e) {
                           showSnackBar(
                               "Error : $e ", Duration(milliseconds: 800));
@@ -345,7 +329,9 @@ class _SellState extends State<Sell> {
     _descriptionController.clear();
     // _categoryController.clear();
     _priceController.clear();
-    setState(() {});
+    setState(() {
+      _image = null;
+    });
     showSnackBar("Product Added Sucessfully", Duration(milliseconds: 800));
   }
 
