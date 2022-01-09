@@ -156,7 +156,9 @@ class _ProfileState extends State<Profile> {
                               decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: AssetImage(customerCare)))),
-                          onTap: () {},
+                          onTap: () {
+                            openwhatsapp(context);
+                          },
                           radius: 20,
                           splashColor: Colors.amberAccent,
                         ),

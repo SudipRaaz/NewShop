@@ -26,23 +26,6 @@ class Home extends StatelessWidget {
   List recommendedItems = [];
   List featuredItems = [];
 
-  // void popularItems() {
-  //   FirebaseFirestore.instance
-  //       .collection('Products')
-  //       .doc('SubProductsCategory')
-  //       .collection('RecommendedItems')
-  //       .get()
-  //       .then((QuerySnapshot querySnapshot) {
-  //     querySnapshot.docs.map((DocumentSnapshot document) {
-  //       Map productdata = document.data() as Map<String, dynamic>;
-  //       recommendedItems.add(productdata);
-  //       // a['id'] = document.id;
-  //     }).toList();
-
-  //     print("recommended snapshot : ${recommendedItems}");
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> stream1 = FirebaseFirestore.instance
@@ -101,42 +84,6 @@ class Home extends StatelessWidget {
           featuredItems.add(productdata);
           // a['id'] = document.id;
         }).toList();
-        // return StreamBuilder<QuerySnapshot>(
-        //   stream: stream1,
-        //   builder: (context, snapshot1) {
-        //     return StreamBuilder<QuerySnapshot>(
-        //       stream: stream2,
-        //       builder: (context, snapshot2) {
-        //         return StreamBuilder<QuerySnapshot>(
-        //             stream: stream3,
-        //             builder: (context, snapshot3) {
-        //               return Text(
-        //                 'stream1: ${snapshot1.data} - stream2: ${snapshot2.data} - stream3: ${snapshot3.data}',
-        //               );
-
-        // StreamBuilder<QuerySnapshot>(
-        //     stream: ProductStream,
-        //     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        //       if (snapshot.hasError) {
-        //         print('Something went Wrong');
-        //       }
-        //       if (!snapshot.hasData) {
-        //         return const Center(
-        //           child: CircularProgressIndicator(),
-        //         );
-        //       }
-        //       if (snapshot.connectionState == ConnectionState.waiting) {
-        //         return const Center(
-        //           child: CircularProgressIndicator(),
-        //         );
-        //       }
-        //       ProductsDocs = [];
-
-        //       snapshot.data!.docs.map((DocumentSnapshot document) {
-        //         Map productdata = document.data() as Map<String, dynamic>;
-        //         ProductsDocs.add(productdata);
-        //         // a['id'] = document.id;
-        //       }).toList();
 
         return Scaffold(
             appBar: AppBar(
@@ -147,15 +94,6 @@ class Home extends StatelessWidget {
                 IconButton(
                     onPressed: () {
                       print("ProductsDocs: $topSelling");
-                      // print(snapshots.item1.data);
-                      // print(snapshots.item2.data);
-                      // print(snapshots.item3.data);
-                      {}
-
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => CartItems()));
                     },
                     icon: const Icon(
                       Icons.shopping_cart,
@@ -170,79 +108,11 @@ class Home extends StatelessWidget {
               children: [
                 Column(
                   children: [
-// **************************************** search item bar ****************************************
-                    Container(
-                      color: Colors.orange.shade400,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        child: Container(
-                          height: 40,
-                          decoration: const BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          child: Row(
-                            children: [
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                  // flex: 1,
-                                  child: TextFormField(
-                                      decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Search Items",
-                                hintStyle: TextStyle(color: Colors.white),
-                              ))),
-                              Expanded(
-                                  flex: 0,
-                                  child: Row(
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(Icons.search)),
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(Icons.mic))
-                                    ],
-                                  )),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-// *************************************************Chips ****************************************
-                    // chips elements
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const <Widget>[
-                        Chip(
-                          label: Text("Category"),
-                          elevation: 4,
-                          labelPadding: EdgeInsets.symmetric(horizontal: 15),
-                        ),
-                        Chip(
-                          label: Text("Auction"),
-                          elevation: 4,
-                          labelPadding: EdgeInsets.symmetric(horizontal: 15),
-                        ),
-                        Chip(
-                          label: Text("Rent"),
-                          elevation: 4,
-                          labelPadding: EdgeInsets.symmetric(horizontal: 15),
-                        ),
-                        Chip(
-                          label: Text("Offers"),
-                          elevation: 4,
-                          labelPadding: EdgeInsets.symmetric(horizontal: 15),
-                        ),
-                      ],
-                    ),
                     const SizedBox(
-                      height: 3,
+                      height: 10,
                     ),
 // ******************************************** carousel slider *********************************
-                    OfferSlider(),
+                    const OfferSlider(),
 // ******************************************** Items displaying *********************************
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),

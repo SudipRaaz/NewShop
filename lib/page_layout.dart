@@ -10,17 +10,14 @@ import 'package:second_shopp/screen/home_page.dart';
 import 'package:second_shopp/screen/notification_page.dart';
 import 'package:second_shopp/screen/profile.dart';
 import 'package:second_shopp/screen/sell.dart';
-
 import 'model/tab_manager.dart';
+import 'globals.dart' as globals;
 
-class PageLayout extends StatefulWidget {
-  const PageLayout({Key? key}) : super(key: key);
+class PageLayout extends StatelessWidget {
+  PageLayout({
+    Key? key,
+  }) : super(key: key);
 
-  @override
-  _PageLayoutState createState() => _PageLayoutState();
-}
-
-class _PageLayoutState extends State<PageLayout> {
   List pages = <Widget>[
     Home(),
     Category(),
@@ -29,16 +26,23 @@ class _PageLayoutState extends State<PageLayout> {
     Profile(),
   ];
 
-  bool checkForNotication = false;
-
+  bool checkForNotification = false;
   int _counter = 0;
 
   @override
   void initState() {
-    super.initState();
+    Future<void> _firebaseMessagingBackgroundHandler(
+        RemoteMessage message) async {
+      await Firebase.initializeApp();
+      if (message.messageId != null) {
+        globals.newNotifications = true;
+      }
+      print('A bg message just showed up :  ${message.messageId}');
+    }
+
     // TODO: implement initState
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // checkForNotication = true;
+      checkForNotification = true;
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
@@ -56,15 +60,16 @@ class _PageLayoutState extends State<PageLayout> {
                 icon: '@mipmap/ic_launcher',
               ),
             ));
-        checkForNotication = true;
+        checkForNotification = true;
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      checkForNotification = true;
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
-        checkForNotication = true;
+        checkForNotification = true;
       }
       if (notification != null) {
         // checkForNotication = true;
@@ -72,45 +77,37 @@ class _PageLayoutState extends State<PageLayout> {
     });
   }
 
-  void showNotification() {
-    setState(() {
-      _counter++;
-    });
-    flutterLocalNotificationsPlugin.show(
-        0,
-        "Testing $_counter",
-        "How you doin ?",
-        NotificationDetails(
-            android: AndroidNotificationDetails(channel.id, channel.name,
-                importance: Importance.high,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_launcher')));
-  }
+  // void showNotification() {
+  //   setState(() {
+  //     _counter++;
+  //   });
+  //   flutterLocalNotificationsPlugin.show(
+  //       0,
+  //       "Testing $_counter",
+  //       "How you doin ?",
+  //       NotificationDetails(
+  //           android: AndroidNotificationDetails(channel.id, channel.name,
+  //               importance: Importance.high,
+  //               color: Colors.blue,
+  //               playSound: true,
+  //               icon: '@mipmap/ic_launcher')));
+  // }
 
   @override
   Widget build(BuildContext context) {
-    print('notification status: $checkForNotication');
+    print('notification status: ${globals.newNotifications}');
     return Consumer<TabManager>(builder: (context, tabManager, child) {
       return Scaffold(
-          body:
-              //  Center(
-              //   child: MaterialButton(
-              //     onPressed: () {
-              //       showNotification();
-              //     },
-              //     child: Text('hello  notification '),
-              //   ),
-              // ),
-              // pages[tabManager.selectedTab],
-              (checkForNotication) ? pages[3] : pages[tabManager.selectedTab],
+          body: (globals.newNotifications)
+              ? pages[3]
+              : pages[tabManager.selectedTab],
           bottomNavigationBar: BottomNavigationBar(
-            currentIndex: (checkForNotication)
+            currentIndex: (globals.newNotifications)
                 ? tabManager.selectedTab = 3
                 : tabManager.selectedTab,
             // tabManager.selectedTab = 1,
             onTap: (index) {
-              checkForNotication = false;
+              globals.newNotifications = false;
               tabManager.goToTab(index);
             },
             fixedColor: Colors.black,
