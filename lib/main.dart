@@ -13,6 +13,7 @@ import 'package:second_shopp/theme_data.dart';
 import 'page_layout.dart';
 import 'model/tab_manager.dart';
 import 'globals.dart' as globals;
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -93,9 +94,78 @@ class SecondShop extends StatelessWidget {
                 )
               ],
               child: MaterialApp(
-                theme: theme,
-                home: AuthenticationWrapper(),
-              ),
+                  theme: theme,
+                  home: AnimatedSplashScreen(
+                      splash:
+                          // Scaffold(
+                          //   body: Container(
+                          //     width: double.infinity,
+                          //     height: double.infinity,
+                          //     decoration: BoxDecoration(
+                          //       gradient: LinearGradient(
+                          //           begin: Alignment.topRight,
+                          //           end: Alignment.bottomLeft,
+                          //           colors: [
+                          //             Color(0xFFFF800B),
+                          //             Color(0xFFCE1010),
+                          //           ]),
+                          //     ),
+                          //     child: Column(
+                          //       crossAxisAlignment: CrossAxisAlignment.center,
+                          //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          //       children: [
+                          //         Column(
+                          //           children: [
+                          //             Image.asset(
+                          //               "assets/images/1.jpg",
+                          //               height: 300.0,
+                          //               width: 300.0,
+                          //             ),
+                          //             Text(
+                          //               "A whole grocery store\n at your fingertips",
+                          //               textAlign: TextAlign.center,
+                          //               style: TextStyle(
+                          //                 color: Colors.white,
+                          //                 fontWeight: FontWeight.bold,
+                          //                 fontSize: 18.0,
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //         CircularProgressIndicator(
+                          //           valueColor: AlwaysStoppedAnimation<Color>(
+                          //               Colors.orange),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+                          Column(
+                        children: [
+                          Container(
+                            width: 40,
+                            // height: 10,
+                            child: const CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.black),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: Text(
+                              'Second Shop',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 35),
+                            ),
+                          )
+                        ],
+                      ),
+                      duration: 2000,
+                      backgroundColor: Colors.orange.shade400,
+                      splashTransition: SplashTransition.fadeTransition,
+                      nextScreen: AuthenticationWrapper())
+                  // AuthenticationWrapper(),
+                  ),
             );
           }
 

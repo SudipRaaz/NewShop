@@ -61,6 +61,8 @@ dependencies:
   #managing notification
   firebase_messaging: ^11.2.5
   flutter_local_notifications: ^9.2.0
+  #splash screen 
+  animated_splash_screen: ^1.1.0
 
 dev_dependencies:
   flutter_test:
