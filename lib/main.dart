@@ -12,6 +12,7 @@ import 'package:second_shopp/model/data/transaction_dao.dart';
 import 'package:second_shopp/theme_data.dart';
 import 'page_layout.dart';
 import 'model/tab_manager.dart';
+import 'globals.dart' as globals;
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -29,6 +30,8 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('A bg message just showed up :  ${message.messageId}');
+  globals.newNotifications = true;
+  if (message.messageId != null) {}
 }
 
 Future<void> main() async {
