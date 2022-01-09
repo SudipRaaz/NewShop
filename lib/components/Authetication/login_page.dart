@@ -57,20 +57,19 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 8,
                               ),
                               TextField(
-                                onChanged: (val) {
-                                  setState(() {
-                                    _email = val;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 0),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                ),
-                              ),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _email = val;
+                                    });
+                                  },
+                                  textAlign: TextAlign.start,
+                                  textAlignVertical: TextAlignVertical.bottom,
+                                  decoration: InputDecoration(
+                                    // hintText: 'Enter Product Name',
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                  )),
                             ]),
                       ),
                       const SizedBox(
@@ -92,22 +91,19 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 8,
                               ),
                               TextField(
-                                onChanged: (val) {
-                                  setState(() {
-                                    _password = val;
-                                  });
-                                },
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 0),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                ),
-                              ),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _password = val;
+                                    });
+                                  },
+                                  obscureText: true,
+                                  textAlign: TextAlign.start,
+                                  textAlignVertical: TextAlignVertical.bottom,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                  )),
                             ]),
                       ),
                     ],
@@ -119,18 +115,24 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 32),
                       child: TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             try {
                               print("$_email  , $_password");
                               FocusManager.instance.primaryFocus?.unfocus();
+                              if (_email.trim().length == 0) {
+                                showSnackBar("Enter your Email",
+                                    Duration(milliseconds: 1200));
+                              }
 
-                              // _auth.createUserWithEmailAndPassword(
-                              //     email: _email, password: _password);
+                              await _auth.sendPasswordResetEmail(
+                                  email: _email.trim());
+                              showSnackBar("Check Your Mail Box",
+                                  Duration(milliseconds: 1200));
                             } catch (e) {
-                              print("Error: $e");
+                              print("reset password error : $e");
                             }
                           },
-                          child: Text("Forget Password")),
+                          child: const Text("Forgot Password")),
                     ),
                   ],
                 ),

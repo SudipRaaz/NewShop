@@ -25,13 +25,30 @@ class Category extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange.shade400,
-        title: Text("Categories"),
+        title: const Text(
+          "Categories",
+          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 26),
+        ),
+        centerTitle: true,
       ),
       body: ListView.builder(
         itemCount: entries.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: GestureDetector(
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white70,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3),
+                    ),
+                  ]),
+              child: GestureDetector(
                 onTap: () {
                   String categoryName = entries[index].toString();
                   Navigator.push(
@@ -40,10 +57,16 @@ class Category extends StatelessWidget {
                           builder: (context) => Categorylist(
                                 categoryName: categoryName,
                               )));
-                  print('pressed on : $categoryName');
-                  print('hello text tapped');
                 },
-                child: Text('${entries[index]}')),
+                child: ListTile(
+                  title: Text(
+                    entries[index],
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ),
           );
         },
       ),
