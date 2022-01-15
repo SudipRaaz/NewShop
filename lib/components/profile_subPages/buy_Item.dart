@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_khalti/flutter_khalti.dart';
 import 'package:provider/provider.dart';
+import 'package:second_shopp/model/data/report_dao.dart';
+import 'package:second_shopp/model/data/report_data.dart';
 import 'package:second_shopp/model/data/transaction.dart';
 import 'package:second_shopp/model/data/transaction_dao.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:second_shopp/globals.dart' as globals;
 
 class BuyDetail_Page extends StatelessWidget {
   BuyDetail_Page({
@@ -16,6 +20,7 @@ class BuyDetail_Page extends StatelessWidget {
     required this.price,
     required this.downloadURL,
     required this.productID,
+    required this.sellerID,
     required this.sellerName,
     required this.sellerPhone,
   }) : super(key: key);
@@ -26,6 +31,7 @@ class BuyDetail_Page extends StatelessWidget {
   String description;
   String productID;
   int price;
+  String sellerID;
   String sellerName;
   String sellerPhone;
 
@@ -38,7 +44,11 @@ class BuyDetail_Page extends StatelessWidget {
   Widget build(BuildContext context) {
     User? userToken = _auth.currentUser;
     userID = userToken?.uid;
-    print("userToken = $userID");
+
+    final reportDao = Provider.of<Report_Dao>(context, listen: false);
+
+    late final TextEditingController _reportmessageController =
+        TextEditingController();
 
     String sellerNumber = '+977$sellerPhone';
 
@@ -55,31 +65,98 @@ class BuyDetail_Page extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(14.0),
-                      child: Container(
-                        height: 250,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: NetworkImage("$downloadURL"),
-                              fit: BoxFit.cover),
-                          color: Colors.orange.shade300,
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
+                      child: Stack(
+                        alignment: AlignmentDirectional.topEnd,
+                        children: [
+                          Container(
+                            height: 350,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage("$downloadURL"),
+                                  fit: BoxFit.cover),
+                              color: Colors.orange.shade300,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Report this post'),
+                                      content: TextFormField(
+                                          controller: _reportmessageController,
+                                          decoration: const InputDecoration(
+                                              hintText: 'Reason')),
+                                      actions: [
+                                        TextButton(
+                                          // FlatButton widget is used to make a text to work like a button
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          }, // function used to perform after pressing the button
+                                          child: const Text(
+                                            'CANCEL',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            print(
+                                                _reportmessageController.text);
+                                            if (_reportmessageController
+                                                .text
+                                                // .trim()
+                                                .isNotEmpty) {
+                                              await _storeReportMessage(
+                                                  reportDao,
+                                                  _reportmessageController
+                                                      .text);
+                                              _reportmessageController.clear();
+                                            }
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text(
+                                            'SUBMIT',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                        ),
+                                      ],
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))),
+                                    );
+                                  });
+                              print('report button pressed');
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 330, top: 7),
+                              child: Container(
+                                height: 40,
+                                decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/report.png'))),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                     const SizedBox(
                       height: 10,
-                      // child: Container(
-                      //   color: Colors.indigoAccent,
-                      // ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -88,7 +165,6 @@ class BuyDetail_Page extends StatelessWidget {
                           RowData(
                             title: "Title ",
                             name: "$title",
-                            icon: Icons.favorite_border_outlined,
                           ),
                           RowData(title: "Price ", name: "Rs $price"),
                           RowData(
@@ -105,8 +181,8 @@ class BuyDetail_Page extends StatelessWidget {
                               CircleAvatar(
                                   radius: 28,
                                   backgroundColor: Colors.orange.shade400,
-                                  backgroundImage:
-                                      NetworkImage(downloadURL.toString())),
+                                  backgroundImage: const AssetImage(
+                                      'assets/images/customer.png')),
                               const SizedBox(
                                 width: 10,
                               ),
@@ -154,12 +230,6 @@ class BuyDetail_Page extends StatelessWidget {
                 )
               ],
             ),
-            // SizedBox(
-            //   height: 100,
-            //   child: Container(
-            //     color: Colors.orange,
-            //   ),
-            // ),
             Padding(
               padding: const EdgeInsets.all(15),
               child: Row(
@@ -169,7 +239,10 @@ class BuyDetail_Page extends StatelessWidget {
                     elevation: 8,
                     padding: const EdgeInsets.all(12),
                     color: Colors.orange.shade300,
-                    onPressed: () {},
+                    onPressed: () {
+                      print(this.sellerID);
+                      print(this.userID.toString());
+                    },
                     child: const Text(
                       "Add To Watch List",
                       style: TextStyle(fontSize: 18),
@@ -229,8 +302,16 @@ class BuyDetail_Page extends StatelessWidget {
         });
   }
 
+  _storeReportMessage(Report_Dao report_dao, reportMessage) {
+    late final ReportMessage_data = ReportMessage(
+        userID: userID.toString(),
+        sellerID: this.sellerID,
+        message: reportMessage,
+        productID: productID);
+    report_dao.reportPost(ReportMessage_data);
+  }
+
   Future<void> _storeTransactionDetails(Transaction_Dao transaction_dao) async {
-    print('storeTransaction details function running');
     late final transaction_data = Transaction_Data(
       amount: transactionData['amount'],
       mobile: transactionData['mobile'],
@@ -239,7 +320,6 @@ class BuyDetail_Page extends StatelessWidget {
       token: transactionData['token'],
       UserID: userID.toString(),
     );
-    print("$transaction_data data send to transaction data");
     transaction_dao.saveTransactionData(transaction_data);
   }
 
@@ -261,19 +341,22 @@ class BuyDetail_Page extends StatelessWidget {
               title: Text('Second Shop uses WhatsApp for messaging'),
               content: Text('Download WhatsApp to use messanging feature.'),
               actions: [
-                FlatButton(
+                TextButton(
                   // FlatButton widget is used to make a text to work like a button
                   onPressed: () {
                     Navigator.pop(context);
                   }, // function used to perform after pressing the button
-                  child: Text('CANCEL'),
+                  child: const Text(
+                    'CANCEL',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
                 TextButton(
                   // textColor: Colors.black,
                   onPressed: () {
                     StoreRedirect.redirect(androidAppId: 'com.whatsapp');
                   },
-                  child: Text('DOWNLOAD'),
+                  child: const Text('DOWNLOAD'),
                 ),
               ],
               shape: const RoundedRectangleBorder(
@@ -288,13 +371,12 @@ class RowData extends StatelessWidget {
   String title;
   String name;
   IconData? icon;
-  RowData({Key? key, required this.title, required this.name, this.icon})
+  RowData({Key? key, required this.title, required this.name})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -306,10 +388,6 @@ class RowData extends StatelessWidget {
           "$name",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
         )),
-        Icon(
-          icon,
-          size: 40,
-        )
       ],
     );
   }

@@ -7,6 +7,7 @@ import 'package:second_shopp/components/profile_subPages/cart_page.dart';
 import 'package:second_shopp/model/auth%20service/autheticationService.dart';
 import 'package:second_shopp/model/data/notification_dao.dart';
 import 'package:second_shopp/model/data/registration_dao.dart';
+import 'package:second_shopp/model/data/report_dao.dart';
 import 'package:second_shopp/model/data/sell_dao.dart';
 import 'package:second_shopp/model/data/transaction_dao.dart';
 import 'package:second_shopp/theme_data.dart';
@@ -82,6 +83,7 @@ class SecondShop extends StatelessWidget {
                 Provider(create: (_) => Registration_Dao()),
                 Provider(create: (_) => Transaction_Dao()),
                 Provider(create: (_) => Notification_Dao()),
+                Provider(create: (_) => Report_Dao()),
                 Provider(create: (_) => CartItems()),
                 // for the authentication
                 Provider<AuthenticationService>(
@@ -96,51 +98,7 @@ class SecondShop extends StatelessWidget {
               child: MaterialApp(
                   theme: theme,
                   home: AnimatedSplashScreen(
-                      splash:
-                          // Scaffold(
-                          //   body: Container(
-                          //     width: double.infinity,
-                          //     height: double.infinity,
-                          //     decoration: BoxDecoration(
-                          //       gradient: LinearGradient(
-                          //           begin: Alignment.topRight,
-                          //           end: Alignment.bottomLeft,
-                          //           colors: [
-                          //             Color(0xFFFF800B),
-                          //             Color(0xFFCE1010),
-                          //           ]),
-                          //     ),
-                          //     child: Column(
-                          //       crossAxisAlignment: CrossAxisAlignment.center,
-                          //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          //       children: [
-                          //         Column(
-                          //           children: [
-                          //             Image.asset(
-                          //               "assets/images/1.jpg",
-                          //               height: 300.0,
-                          //               width: 300.0,
-                          //             ),
-                          //             Text(
-                          //               "A whole grocery store\n at your fingertips",
-                          //               textAlign: TextAlign.center,
-                          //               style: TextStyle(
-                          //                 color: Colors.white,
-                          //                 fontWeight: FontWeight.bold,
-                          //                 fontSize: 18.0,
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         ),
-                          //         CircularProgressIndicator(
-                          //           valueColor: AlwaysStoppedAnimation<Color>(
-                          //               Colors.orange),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-                          Column(
+                      splash: Column(
                         children: [
                           Container(
                             width: 40,
@@ -150,21 +108,18 @@ class SecondShop extends StatelessWidget {
                                   AlwaysStoppedAnimation<Color>(Colors.black),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.all(2.0),
-                            child: Text(
-                              'Second Shop',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 35),
-                            ),
+                          Text(
+                            'Second Shop',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 35),
                           )
                         ],
                       ),
-                      duration: 2000,
+                      duration: 1000,
                       backgroundColor: Colors.orange.shade400,
                       splashTransition: SplashTransition.fadeTransition,
                       nextScreen: AuthenticationWrapper())
-                  // AuthenticationWrapper(),
+                  // home: AuthenticationWrapper(),
                   ),
             );
           }

@@ -7,7 +7,7 @@ class Categorylist extends StatelessWidget {
   Categorylist({Key? key, required this.categoryName}) : super(key: key);
   String categoryName;
 
-  final List ProductsDocs = [];
+  List ProductsDocs = [];
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +34,7 @@ class Categorylist extends StatelessWidget {
             );
           }
 
+          ProductsDocs = [];
           snapshot.data!.docs.map((DocumentSnapshot document) {
             Map productdata = document.data() as Map<String, dynamic>;
             ProductsDocs.add(productdata);
@@ -56,6 +57,7 @@ class Categorylist extends StatelessWidget {
                       pcategory: ProductsDocs[index]['category'],
                       downloadURL: ProductsDocs[index]['downloadURL'],
                       description: ProductsDocs[index]['description'],
+                      sellerID: ProductsDocs[index]['UserID'],
                       sellerName: ProductsDocs[index]['sellerName'],
                       sellerPhone: ProductsDocs[index]['sellerPhone'],
                       productID: ProductsDocs[index]['productID'],

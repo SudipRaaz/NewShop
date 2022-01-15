@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:second_shopp/components/home_slideshow.dart';
-import 'package:second_shopp/components/profile_subPages/buy_Item.dart';
-import 'package:second_shopp/components/profile_subPages/cart_page.dart';
 import 'package:second_shopp/components/tile_components.dart';
-import 'package:second_shopp/model/data/sell_dao.dart';
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
+import 'package:second_shopp/globals.dart' as globals;
 
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
@@ -22,7 +19,7 @@ class Home extends StatelessWidget {
   ];
 
   // List ProductsDocs = [];
-  List topSelling = [];
+  List popularItems = [];
   List recommendedItems = [];
   List featuredItems = [];
 
@@ -33,24 +30,23 @@ class Home extends StatelessWidget {
         .doc('SubProductsCategory')
         .collection('PopularItems')
         .snapshots();
-    ;
+
     final Stream<QuerySnapshot> stream2 = FirebaseFirestore.instance
         .collection('Products')
         .doc('SubProductsCategory')
         .collection('RecommendedItems')
         .snapshots();
-    ;
+
     final Stream<QuerySnapshot> stream3 = FirebaseFirestore.instance
         .collection('Products')
         .doc('SubProductsCategory')
         .collection('MobileItems')
         .snapshots();
-    ;
 
     return StreamBuilder3<QuerySnapshot, QuerySnapshot, QuerySnapshot>(
       streams: Tuple3(stream1, stream2, stream3),
       builder: (context, snapshots) {
-        topSelling = [];
+        popularItems = [];
         recommendedItems = [];
         featuredItems = [];
 
@@ -71,8 +67,9 @@ class Home extends StatelessWidget {
         }
         snapshots.item1.data!.docs.map((DocumentSnapshot document) {
           Map productdata = document.data() as Map<String, dynamic>;
-          topSelling.add(productdata);
-          // a['id'] = document.id;
+          globals.productDocID = document.id;
+          // print('document ID: ${globals.productDocID}');
+          popularItems.add(productdata);
         }).toList();
         snapshots.item2.data!.docs.map((DocumentSnapshot document) {
           Map productdata = document.data() as Map<String, dynamic>;
@@ -82,7 +79,7 @@ class Home extends StatelessWidget {
         snapshots.item3.data!.docs.map((DocumentSnapshot document) {
           Map productdata = document.data() as Map<String, dynamic>;
           featuredItems.add(productdata);
-          // a['id'] = document.id;
+          // a['documentID'] = document.id;
         }).toList();
 
         return Scaffold(
@@ -93,7 +90,7 @@ class Home extends StatelessWidget {
               actions: [
                 IconButton(
                     onPressed: () {
-                      print("ProductsDocs: $topSelling");
+                      print("ProductsDocs: $popularItems");
                     },
                     icon: const Icon(
                       Icons.shopping_cart,
@@ -145,6 +142,8 @@ class Home extends StatelessWidget {
                                             ['downloadURL'],
                                         productID: featuredItems[index]
                                             ['productID'],
+                                        sellerID: featuredItems[index]
+                                            ['UserID'],
                                         sellerName: featuredItems[index]
                                             ['sellerName'],
                                         sellerPhone: featuredItems[index]
@@ -160,7 +159,7 @@ class Home extends StatelessWidget {
                           ),
                           const SizedBox(
                             child: Text(
-                              'Top Selling',
+                              'Popular Items',
                               style: TextStyle(fontSize: 25),
                             ),
                           ),
@@ -173,20 +172,21 @@ class Home extends StatelessWidget {
                                     itemBuilder: (context, int index) {
                                       return ItemTiles(
                                         press: () {},
-                                        title: topSelling[index]['title'],
-                                        description: topSelling[index]
+                                        title: popularItems[index]['title'],
+                                        description: popularItems[index]
                                             ['description'],
-                                        pcategory: topSelling[index]
+                                        pcategory: popularItems[index]
                                             ['category'],
                                         price: int.parse(
-                                            topSelling[index]['price']),
-                                        downloadURL: topSelling[index]
+                                            popularItems[index]['price']),
+                                        downloadURL: popularItems[index]
                                             ['downloadURL'],
-                                        productID: topSelling[index]
+                                        productID: popularItems[index]
                                             ['productID'],
-                                        sellerName: topSelling[index]
+                                        sellerID: popularItems[index]['UserID'],
+                                        sellerName: popularItems[index]
                                             ['sellerName'],
-                                        sellerPhone: topSelling[index]
+                                        sellerPhone: popularItems[index]
                                             ['sellerPhone'],
                                       );
                                     },
@@ -195,7 +195,7 @@ class Home extends StatelessWidget {
                                         width: 8,
                                       );
                                     },
-                                    itemCount: topSelling.length)),
+                                    itemCount: popularItems.length)),
                           ),
                           const SizedBox(
                             child: Text(
@@ -219,10 +219,12 @@ class Home extends StatelessWidget {
                                             ['category'],
                                         price: int.parse(
                                             recommendedItems[index]['price']),
-                                        downloadURL: topSelling[index]
+                                        downloadURL: popularItems[index]
                                             ['downloadURL'],
                                         productID: recommendedItems[index]
                                             ['productID'],
+                                        sellerID: recommendedItems[index]
+                                            ['UserID'],
                                         sellerName: recommendedItems[index]
                                             ['sellerName'],
                                         sellerPhone: recommendedItems[index]
@@ -236,6 +238,8 @@ class Home extends StatelessWidget {
                                     },
                                     itemCount: recommendedItems.length)),
                           ),
+
+//*****************************************************************up to here************************************* */
 
                           // const SizedBox(
                           //   child: Text(

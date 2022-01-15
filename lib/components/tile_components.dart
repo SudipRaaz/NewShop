@@ -16,6 +16,7 @@ class ItemTiles extends StatelessWidget {
   int price;
   String downloadURL;
   String productID;
+  String sellerID;
   String sellerName;
   String sellerPhone;
 
@@ -28,6 +29,7 @@ class ItemTiles extends StatelessWidget {
     required this.price,
     required this.downloadURL,
     required this.productID,
+    required this.sellerID,
     required this.sellerName,
     required this.sellerPhone,
   }) : super(key: key);
@@ -48,6 +50,7 @@ class ItemTiles extends StatelessWidget {
                       price: this.price,
                       downloadURL: this.downloadURL,
                       productID: this.productID,
+                      sellerID: this.sellerID,
                       sellerName: this.sellerName,
                       sellerPhone: this.sellerPhone,
                     )));
