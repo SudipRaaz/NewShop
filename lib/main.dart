@@ -108,7 +108,7 @@ class SecondShop extends StatelessWidget {
                                   AlwaysStoppedAnimation<Color>(Colors.black),
                             ),
                           ),
-                          Text(
+                          const Text(
                             'Second Shop',
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 35),

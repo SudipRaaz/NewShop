@@ -29,117 +29,129 @@ class _RegistrationPageState extends State<RegistrationPage> {
         body: SafeArea(
       child: ListView(
         children: [
-          Container(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Registration",
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 3,
-                      child: Container(color: Colors.black38),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    )
-                  ],
-                ),
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Column(
+          Stack(
+            children: [
+              Expanded(
+                  child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/images/login.png'),
+                              fit: BoxFit.fill)))),
+              Container(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        inputFile(
-                            label: "Name", providedController: _nameController),
-                        inputFile(
-                            label: "Address",
-                            providedController: _addressController),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              const Text(
-                                "Phone Number",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 3,
-                              ),
-                              TextField(
-                                keyboardType: TextInputType.phone,
-                                controller: _phoneController,
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 10),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ]),
-                        inputFile(
-                            label: "email",
-                            providedController: _emailController),
-                        inputFile(
-                            label: "password",
-                            obscureText: true,
-                            providedController: _passwordController),
-                      ],
-                    )),
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 30, left: 3),
-                      child: MaterialButton(
-                          padding: const EdgeInsets.symmetric(horizontal: 50),
-                          // minWidth: double.infinity,
-                          height: 50,
-                          onPressed: () async {
-                            try {
-                              await _auth.createUserWithEmailAndPassword(
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text);
-
-                              User? userToken = _auth.currentUser;
-                              String? userID = userToken?.uid;
-                              print("userToken = $userID");
-                              _storeUsers(registrationDao, userID);
-                              Navigator.pop(context);
-                            } catch (e) {
-                              print("Error: $e");
-                            }
-                          },
-                          color: Colors.orange.shade400,
-                          elevation: 15,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
+                    Column(
+                      children: const <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "Registration",
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
                           ),
-                          child: const Text("Register",
-                              style: TextStyle(
-                                fontSize: 25,
-                                color: Colors.white,
-                              ))),
-                    )),
-              ])),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ],
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Column(
+                          children: <Widget>[
+                            inputFile(
+                                label: "Name",
+                                providedController: _nameController),
+                            inputFile(
+                                label: "Address",
+                                providedController: _addressController),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  const Text(
+                                    "Phone Number",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 3,
+                                  ),
+                                  TextField(
+                                    keyboardType: TextInputType.phone,
+                                    controller: _phoneController,
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 0, horizontal: 10),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  )
+                                ]),
+                            inputFile(
+                                label: "email",
+                                providedController: _emailController),
+                            inputFile(
+                                label: "password",
+                                obscureText: true,
+                                providedController: _passwordController),
+                          ],
+                        )),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 70), //180
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 30, left: 3),
+                          child: MaterialButton(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 50),
+                              // minWidth: double.infinity,
+                              height: 50,
+                              onPressed: () async {
+                                try {
+                                  // registers the user with the entered email and password
+                                  await _auth.createUserWithEmailAndPassword(
+                                      email: _emailController.text.trim(),
+                                      password: _passwordController.text);
+
+                                  User? userToken = _auth.currentUser;
+                                  String? userID = userToken?.uid;
+                                  _storeUsers(registrationDao, userID);
+                                  Navigator.pop(context);
+                                } catch (e) {
+                                  print("Error: $e");
+                                }
+                              },
+                              color: Color.fromARGB(255, 255, 196, 107),
+                              elevation: 15,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: const Text("Register",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.white,
+                                  ))),
+                        )),
+                  ])),
+            ],
+          ),
         ],
       ),
     ));
   }
 
+  // store the user details in the firebase
   void _storeUsers(Registration_Dao registrationDao, userID) {
     final register = Registration(
         name: _nameController.text,
@@ -148,7 +160,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         email: _emailController.text,
         password: _passwordController.text);
     registrationDao.saveUser(register, userID);
-
+//clear the fields after the user is saved
     _nameController.clear();
     _addressController.clear();
     _phoneController.clear();
@@ -157,6 +169,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 }
 
+// a text field title and text field layout
 Widget inputFile({label, obscureText = false, providedController}) {
   return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

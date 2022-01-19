@@ -240,6 +240,7 @@ class BuyDetail_Page extends StatelessWidget {
                     padding: const EdgeInsets.all(12),
                     color: Colors.orange.shade300,
                     onPressed: () {
+                      globals.cartItems.add('items added');
                       print(this.sellerID);
                       print(this.userID.toString());
                     },

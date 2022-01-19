@@ -286,11 +286,11 @@ class _ProfileState extends State<Profile> {
                   ),
 
                   // *************************divider ***********************************
-                  SizedBox(
-                    height: 3,
-                    child: Container(
-                      color: Colors.black12,
-                    ),
+
+                  Divider(
+                    indent: 50,
+                    endIndent: 50,
+                    thickness: 3,
                   ),
                   Column(
                     children: [
@@ -308,15 +308,15 @@ class _ProfileState extends State<Profile> {
                           tileName: "Cart Items",
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          // Navigator.push(context,
-                          //     MaterialPageRoute(builder: (context) => BuyDetail_Page(press: ,)));
-                        },
-                        child: _ProfileTile(
-                          tileName: "Watching Items",
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     // Navigator.push(context,
+                      //     //     MaterialPageRoute(builder: (context) => BuyDetail_Page(press: ,)));
+                      //   },
+                      //   child: _ProfileTile(
+                      //     tileName: "Watching Items",
+                      //   ),
+                      // ),
                     ],
                   )
                 ]),
