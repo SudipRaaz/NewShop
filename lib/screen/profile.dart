@@ -286,12 +286,12 @@ class _ProfileState extends State<Profile> {
                   ),
 
                   // *************************divider ***********************************
-
-                  Divider(
+                  const Divider(
                     indent: 50,
                     endIndent: 50,
                     thickness: 3,
                   ),
+                  //************************** cart Tiles *********************************** */
                   Column(
                     children: [
                       const SizedBox(
