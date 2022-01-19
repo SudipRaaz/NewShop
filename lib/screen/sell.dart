@@ -279,9 +279,10 @@ class _SellState extends State<Sell> {
                                 child: TextFormField(
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'please enter price greater than 0';
+                                        return "Enter price";
+                                      } else {
+                                        return null;
                                       }
-                                      return null;
                                     },
                                     controller: _priceController,
                                     textAlign: TextAlign.start,
@@ -315,27 +316,31 @@ class _SellState extends State<Sell> {
                 color: Colors.orange.shade400,
                 // style: const ButtonStyle(),
                 onPressed: () {
-                  _submit();
-                  try {
-                    if (_priceController.text != null) {
-                      if (_image != null) {
-                        try {
-                          uploadImage(_image!, sellDao);
-                          setState(() {
-                            _image = null;
-                          });
-                        } catch (e) {
-                          showSnackBar(
-                              "Error : $e ", Duration(milliseconds: 800));
-                          print("Error: $e");
+                  if (_formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Processing Data')),
+                    );
+                    try {
+                      if (_priceController.text != null) {
+                        if (_image != null) {
+                          try {
+                            uploadImage(_image!, sellDao);
+                            setState(() {
+                              _image = null;
+                            });
+                          } catch (e) {
+                            showSnackBar(
+                                "Error : $e ", Duration(milliseconds: 800));
+                            print("Error: $e");
+                          }
                         }
+                      } else {
+                        showSnackBar(
+                            "Select Image", Duration(milliseconds: 1200));
                       }
-                    } else {
-                      showSnackBar(
-                          "Select Image", Duration(milliseconds: 1200));
+                    } catch (e) {
+                      showSnackBar("Error: $e", Duration(milliseconds: 800));
                     }
-                  } catch (e) {
-                    showSnackBar("Error: $e", Duration(milliseconds: 800));
                   }
                 },
                 child: const Center(
@@ -369,14 +374,6 @@ class _SellState extends State<Sell> {
     _priceController.clear();
     setState(() {});
     showSnackBar("Product Added Sucessfully", Duration(milliseconds: 800));
-  }
-
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
-      );
-    }
   }
 
   showSnackBar(String snackText, Duration d) {
