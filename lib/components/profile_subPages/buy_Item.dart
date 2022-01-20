@@ -11,6 +11,8 @@ import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:second_shopp/globals.dart' as globals;
 
+import '../../model/data/sell_data.dart';
+
 class BuyDetail_Page extends StatelessWidget {
   BuyDetail_Page({
     Key? key,
@@ -240,12 +242,25 @@ class BuyDetail_Page extends StatelessWidget {
                     padding: const EdgeInsets.all(12),
                     color: Colors.orange.shade300,
                     onPressed: () {
-                      globals.cartItems.add('items added');
-                      print(this.sellerID);
-                      print(this.userID.toString());
+                      // globals.cartItems.add('items added');
+
+                      final selldata = Sell_data(
+                        productID: productID,
+                        title: title,
+                        description: description,
+                        category: pcategory,
+                        price: price,
+                        downloadURL: downloadURL,
+                        UserID: userID.toString(),
+                        sellerName: sellerName,
+                        sellerPhone: sellerPhone,
+                      ).toJson();
+                      // print(selldata);
+                      globals.cartItems.add(selldata);
+                      print(globals.cartItems);
                     },
                     child: const Text(
-                      "Add To Watch List",
+                      "Add To Wish List",
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -255,7 +270,6 @@ class BuyDetail_Page extends StatelessWidget {
                     color: Colors.orange.shade300,
                     onPressed: () async {
                       await _sendToKhalti(transactionDao);
-                      // _storeTransactionDetails(transactionDao);
                     },
                     child: const Text(
                       "Buy Now",

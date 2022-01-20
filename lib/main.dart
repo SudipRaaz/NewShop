@@ -61,9 +61,6 @@ class SecondShop extends StatelessWidget {
 
   final theme = SecondShopTheme.light();
 
-  // In this snippet, I'm giving a value to all parameters.
-// Please note that not all are required (those that are required are marked with the @required annotation).
-
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();

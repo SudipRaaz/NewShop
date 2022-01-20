@@ -13,19 +13,23 @@ class CartItems extends StatelessWidget {
             backgroundColor: Colors.orange.shade400,
             leading: BackButton(color: Colors.black)),
         body: ListView.builder(
-            itemBuilder: (context, index) => CartTile(),
+            itemBuilder: (context, index) => (globals.cartItems.length != 0)
+                ? CartTile(
+                    globals.cartItems[index]['downloadURL'],
+                    globals.cartItems[index]['title'],
+                    globals.cartItems[index]['description'],
+                    globals.cartItems[index]['price'])
+                : SizedBox(),
             itemCount: globals.cartItems.length));
   }
 
-  Widget CartTile() {
+  Widget CartTile(pimage, ptitle, pdescription, pprice) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       // ignore: deprecated_member_use
       child: Container(
-        padding: EdgeInsets.all(12),
-        // shape: RoundedRectangleBorder(
-        //     borderRadius: BorderRadius.circular(15)),
-        color: Color(0x0fff9800),
+        padding: EdgeInsets.fromLTRB(4, 12, 15, 12),
+        color: Color.fromARGB(255, 255, 237, 209),
         child: Row(
           children: <Widget>[
             SizedBox(width: 15),
@@ -40,16 +44,15 @@ class CartItems extends StatelessWidget {
                             height: 50,
                             width: 50,
                             decoration: BoxDecoration(
-                              color: Colors.amberAccent,
-                              // image:
-                              //     DecorationImage(image: NetworkImage(''))
-                            ))),
+                                color: Colors.amberAccent,
+                                image: DecorationImage(
+                                    image: NetworkImage(pimage))))),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const <Widget>[
+                        children: <Widget>[
                           Text(
-                            'Title',
+                            '$ptitle',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
@@ -57,7 +60,7 @@ class CartItems extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Description',
+                            '$pdescription',
                             style: TextStyle(
                               fontWeight: FontWeight.normal,
                               fontSize: 14,
@@ -68,7 +71,7 @@ class CartItems extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'price: Rs.999',
+                      'Price : Rs $pprice',
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         fontSize: 14,

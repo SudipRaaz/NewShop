@@ -6,8 +6,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:second_shopp/components/Authetication/login_page.dart';
 import 'package:second_shopp/components/profile_subPages/cart_page.dart';
-import 'package:second_shopp/components/profile_subPages/selling_page.dart';
-import 'package:second_shopp/components/profile_subPages/watching_page.dart';
 import 'package:second_shopp/components/profile_tile.dart';
 import 'package:second_shopp/components/profile_subPages/buy_Item.dart';
 import 'package:second_shopp/model/tab_manager.dart';
@@ -56,7 +54,7 @@ class _ProfileState extends State<Profile> {
         }
 
         if (!snapshot.hasData) {
-          return const Text("Document does not exist");
+          return Center(child: const CircularProgressIndicator.adaptive());
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
@@ -305,7 +303,7 @@ class _ProfileState extends State<Profile> {
                                   builder: (context) => CartItems()));
                         },
                         child: _ProfileTile(
-                          tileName: "Cart Items",
+                          tileName: "Wish List",
                         ),
                       ),
                       // GestureDetector(

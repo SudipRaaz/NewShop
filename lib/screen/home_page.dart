@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:second_shopp/components/home_slideshow.dart';
+import 'package:second_shopp/components/profile_subPages/cart_page.dart';
 import 'package:second_shopp/components/tile_components.dart';
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 import 'package:second_shopp/globals.dart' as globals;
@@ -40,7 +41,7 @@ class Home extends StatelessWidget {
     final Stream<QuerySnapshot> stream3 = FirebaseFirestore.instance
         .collection('Products')
         .doc('SubProductsCategory')
-        .collection('MobileItems')
+        .collection('FeaturedItem')
         .snapshots();
 
     return StreamBuilder3<QuerySnapshot, QuerySnapshot, QuerySnapshot>(
@@ -67,14 +68,11 @@ class Home extends StatelessWidget {
         }
         snapshots.item1.data!.docs.map((DocumentSnapshot document) {
           Map productdata = document.data() as Map<String, dynamic>;
-          globals.productDocID = document.id;
-          // print('document ID: ${globals.productDocID}');
           popularItems.add(productdata);
         }).toList();
         snapshots.item2.data!.docs.map((DocumentSnapshot document) {
           Map productdata = document.data() as Map<String, dynamic>;
           recommendedItems.add(productdata);
-          // a['id'] = document.id;
         }).toList();
         snapshots.item3.data!.docs.map((DocumentSnapshot document) {
           Map productdata = document.data() as Map<String, dynamic>;
@@ -90,7 +88,8 @@ class Home extends StatelessWidget {
               actions: [
                 IconButton(
                     onPressed: () {
-                      print("ProductsDocs: $popularItems");
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => CartItems()));
                     },
                     icon: const Icon(
                       Icons.shopping_cart,
@@ -219,7 +218,7 @@ class Home extends StatelessWidget {
                                             ['category'],
                                         price: int.parse(
                                             recommendedItems[index]['price']),
-                                        downloadURL: popularItems[index]
+                                        downloadURL: recommendedItems[index]
                                             ['downloadURL'],
                                         productID: recommendedItems[index]
                                             ['productID'],
@@ -238,40 +237,6 @@ class Home extends StatelessWidget {
                                     },
                                     itemCount: recommendedItems.length)),
                           ),
-
-//*****************************************************************up to here************************************* */
-
-                          // const SizedBox(
-                          //   child: Text(
-                          //     'Sports Items',
-                          //     style: TextStyle(fontSize: 25),
-                          //   ),
-                          // ),
-                          // Container(
-                          //   height: 210,
-                          //   child: Padding(
-                          //       padding: const EdgeInsets.all(8.0),
-                          //       child: ListView.separated(
-                          //           scrollDirection: Axis.horizontal,
-                          //           itemBuilder: (context, int index) {
-                          //             return ItemTiles(
-                          //               index: index,
-                          //               press: () {},
-                          //               productsData: ProductsDocs,
-                          //               title: ProductsDocs[index]['title'],
-                          //               downloadURL: ProductsDocs[index]
-                          //                   ['downloadURL'],
-                          //               price: int.parse(
-                          //                   ProductsDocs[index]['price']),
-                          //             );
-                          //           },
-                          //           separatorBuilder: (context, int index) {
-                          //             return const SizedBox(
-                          //               width: 8,
-                          //             );
-                          //           },
-                          //           itemCount: ProductsDocs.length)),
-                          // ),
                         ],
                       ),
                     ),
@@ -279,9 +244,6 @@ class Home extends StatelessWidget {
                 )
               ],
             ));
-        //             });
-        //       },
-        //     );
       },
     );
   }
