@@ -1,19 +1,22 @@
 import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
+// ignore: camel_case_types
 class Transaction_Data {
   final double amount;
   final String mobile;
+  // ignore: non_constant_identifier_names
   final String product_ID;
+  // ignore: non_constant_identifier_names
   final String product_name;
   final String token;
+  // ignore: non_constant_identifier_names
   final String UserID;
   final String? date;
   // DateTime.now().toString();
 
   DocumentReference? reference;
-
+  // constructor for the class
   Transaction_Data(
       {required this.amount,
       required this.mobile,
@@ -24,7 +27,7 @@ class Transaction_Data {
       this.date,
       this.reference});
 
-// todo: Add json converters
+// todo: json converters
   factory Transaction_Data.fromJson(Map<dynamic, dynamic> json) =>
       Transaction_Data(
         amount: json['amount'] as double,
@@ -35,7 +38,7 @@ class Transaction_Data {
         UserID: json['UserID'] as String,
         date: json['date'] as String,
       );
-
+// convert to json
   Map<String, dynamic> toJson() => <String, dynamic>{
         'amount': amount,
         'mobile': mobile,

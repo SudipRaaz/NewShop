@@ -13,7 +13,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // global form key
   final _formKey = GlobalKey<FormState>();
+  // firebase authentication instance
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   String _email = '', _password = '';
@@ -26,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
         body: Center(
       child: Stack(
         children: [
+          //background image for login page
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -37,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
           Form(
             key: _formKey,
             child: ListView(
+              // dismiss keyboard on screen drag
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               children: [
                 SafeArea(
@@ -84,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                                       },
                                       onChanged: (val) {
                                         setState(() {
+                                          //set the email value on change
                                           _email = val;
                                         });
                                       },
@@ -101,48 +106,47 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(
                             height: 10,
                           ),
-                          Container(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  const Text(
-                                    "Password",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400,
-                                      // color: Colors.black87,
-                                    ),
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const Text(
+                                  "Password",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    // color: Colors.black87,
                                   ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  TextFormField(
-                                      style: TextStyle(fontSize: 20),
-                                      validator: (value) {
-                                        RegExp regex = new RegExp(r'^.{6,}$');
-                                        if (value!.isEmpty) {
-                                          return ("Password is required for login");
-                                        }
-                                        if (!regex.hasMatch(value)) {
-                                          return ("Enter Valid Password(Min. 6 Character)");
-                                        }
-                                      },
-                                      onChanged: (val) {
-                                        setState(() {
-                                          _password = val;
-                                        });
-                                      },
-                                      obscureText: true,
-                                      textAlign: TextAlign.start,
-                                      textAlignVertical:
-                                          TextAlignVertical.bottom,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30)),
-                                      )),
-                                ]),
-                          ),
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                TextFormField(
+                                    style: const TextStyle(fontSize: 20),
+                                    validator: (value) {
+                                      // password validation for 6 digit
+                                      RegExp regex = RegExp(r'^.{6,}$');
+                                      if (value!.isEmpty) {
+                                        return ("Password is required for login");
+                                      }
+                                      if (!regex.hasMatch(value)) {
+                                        return ("Enter Valid Password(Min. 6 Character)");
+                                      }
+                                    },
+                                    onChanged: (val) {
+                                      setState(() {
+                                        // add the password onchange
+                                        _password = val;
+                                      });
+                                    },
+                                    obscureText: true, // hide password
+                                    textAlign: TextAlign.start,
+                                    textAlignVertical: TextAlignVertical.bottom,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                    )),
+                              ]),
                         ],
                       ),
                     ),
@@ -154,13 +158,14 @@ class _LoginPageState extends State<LoginPage> {
                           child: TextButton(
                               onPressed: () async {
                                 try {
-                                  print("$_email  , $_password");
+                                  // on button press dismiss on screen keyboard
                                   FocusManager.instance.primaryFocus?.unfocus();
+
                                   if (_email.trim().length == 0) {
                                     showSnackBar("Enter your Email",
                                         Duration(milliseconds: 1200));
                                   }
-
+                                  // send reset password mail for entered email address
                                   await _auth.sendPasswordResetEmail(
                                       email: _email.trim());
                                   showSnackBar("Check Your Mail Box",
@@ -186,15 +191,16 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 try {
+                                  // dismiss on screen keyboard
                                   FocusManager.instance.primaryFocus?.unfocus();
+                                  // wait for the user token for the entered email and password
                                   await context
                                       .read<AuthenticationService>()
                                       .signIn(
                                         email: _email.trim(),
                                         password: _password.trim(),
                                       );
-                                  // await userID = _auth.currentUser;
-                                  // print("current user ID : $userID");
+
                                   User? userToken = _auth.currentUser;
                                   String? userID = userToken?.uid;
 
@@ -213,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                                 }
                               }
                             },
-                            color: Color.fromARGB(255, 252, 181, 75),
+                            color: const Color.fromARGB(255, 252, 181, 75),
                             elevation: 15,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50),
@@ -234,6 +240,7 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(fontSize: 17),
                         ),
                         TextButton(
+                            // push registration page for the user registration
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -257,6 +264,7 @@ class _LoginPageState extends State<LoginPage> {
     ));
   }
 
+  // snackbar for communication with user
   showSnackBar(String snackText, Duration d) {
     final snackBar = SnackBar(
       content: Text(snackText),
@@ -267,32 +275,32 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
+// label above the text fields
 Widget inputFile({label, obscureText = false}) {
-  return Container(
-    child:
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-      Text(
-        label,
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w400,
-          // color: Colors.black87,
-        ),
-      ),
-      const SizedBox(
-        height: 8,
-      ),
-      TextField(
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey),
-            borderRadius: BorderRadius.circular(50),
+  return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+            // color: Colors.black87,
           ),
         ),
-      ),
-    ]),
-  );
+        const SizedBox(
+          height: 8,
+        ),
+        TextField(
+          obscureText: obscureText,
+          decoration: InputDecoration(
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.grey),
+              borderRadius: BorderRadius.circular(50),
+            ),
+          ),
+        ),
+      ]);
 }

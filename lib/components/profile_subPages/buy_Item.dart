@@ -342,8 +342,7 @@ class BuyDetail_Page extends StatelessWidget {
     var whatsapp = sellerPhoneNum.toString();
     var whatsappURl_android =
         "whatsapp://send?phone=" + whatsapp + "&text=hello";
-    var whatappURL_ios =
-        "https://wa.me/$whatsapp?text=${Uri.parse("I am interested in $title")}";
+    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse(" hello")}";
 
     // android , web
     if (await canLaunch(whatsappURl_android)) {

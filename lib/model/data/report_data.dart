@@ -15,7 +15,7 @@ class ReportMessage {
     required this.message,
     required this.productID,
   });
-
+// convert to json
   Map<String, dynamic> toJson() => <String, dynamic>{
         'ReporterID': userID,
         'sellerID': sellerID,

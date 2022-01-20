@@ -1,9 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:second_shopp/components/profile_subPages/buy_Item.dart';
-import 'package:second_shopp/model/data/sell_dao.dart';
-import 'package:second_shopp/model/images.dart';
 
 class ItemTiles extends StatelessWidget {
   // final String imageURL;

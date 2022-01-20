@@ -1,6 +1,5 @@
 library my_prj.globals;
 
-import 'package:flutter/material.dart';
 import 'package:second_shopp/theme_data.dart';
 
 // check for new notification

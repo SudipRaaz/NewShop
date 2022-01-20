@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:second_shopp/components/profile_subPages/buy_Item.dart';
-import 'package:second_shopp/model/images.dart';
 
+// ignore: camel_case_types, must_be_immutable
 class categoryTiles extends StatelessWidget {
-  // final String imageURL;
+  // storing field values from previous class stream
   String title;
   String pcategory;
   String downloadURL;
@@ -31,7 +31,6 @@ class categoryTiles extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print('pressed on tile from home page');
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -49,106 +48,43 @@ class categoryTiles extends StatelessWidget {
           ),
         );
       },
+      // *********************************individual list tile in sub-category page********************************/
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                // color: Colors.red,
-                height: 150,
-                width: 160,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage("$downloadURL"), fit: BoxFit.cover),
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    color: Colors.orange.shade200),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                constraints: BoxConstraints(maxWidth: 170),
-                child: Padding(
-                  padding: EdgeInsets.only(left: 6),
-                  child: Text(
-                    '$title',
-                    maxLines: 1,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 23),
-                    child: Text(
-                      'Rs. $price',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/*
-import 'package:flutter/material.dart';
-import 'package:second_shopp/model/images.dart';
-
-class categoryTiles extends StatelessWidget {
-  // final String imageURL;
-  int index = 0;
-
-  categoryTiles({Key? key, required this.index}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               // color: Colors.red,
-              height: 160,
+              height: 150,
               width: 160,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('assets/images/1.jpg'),
-                      fit: BoxFit.cover),
+                      image: NetworkImage("$downloadURL"), fit: BoxFit.cover),
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  color: Colors.cyanAccent),
+                  color: Colors.orange.shade200),
             ),
             Container(
-              constraints: BoxConstraints(maxWidth: 170),
-              child: const Padding(
-                padding: EdgeInsets.only(left: 6),
+              alignment: Alignment.centerLeft,
+              constraints: const BoxConstraints(maxWidth: 170),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 6),
                 child: Text(
-                  'title of the product which is very long and does not fit',
+                  '$title',
                   maxLines: 1,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.end,
-
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 23),
                   child: Text(
-                    'Price: Rs 888',
+                    'Rs. $price',
                     textAlign: TextAlign.start,
-                    style: TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
               ],
@@ -159,4 +95,3 @@ class categoryTiles extends StatelessWidget {
     );
   }
 }
-*/

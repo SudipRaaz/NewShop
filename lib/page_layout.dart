@@ -18,6 +18,7 @@ class PageLayout extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+// list of all the main pages to be accessed from the bottom navigation
   List pages = <Widget>[
     Home(),
     Category(),
@@ -26,21 +27,21 @@ class PageLayout extends StatelessWidget {
     Profile(),
   ];
 
-  bool checkForNotification = false;
-  int _counter = 0;
+  bool checkForNotification = false; // check for new notification
+  int _counter = 0; // count the number of notification
 
   @override
   void initState() {
+    // firebase messaging for the background notifications
     Future<void> _firebaseMessagingBackgroundHandler(
         RemoteMessage message) async {
       await Firebase.initializeApp();
       if (message.messageId != null) {
         globals.newNotifications = true;
       }
-      print('A bg message just showed up :  ${message.messageId}');
     }
 
-    // TODO: implement initState
+    // TODO: implement initState and listen for remote notification
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       checkForNotification = true;
       RemoteNotification? notification = message.notification;
@@ -54,7 +55,6 @@ class PageLayout extends StatelessWidget {
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
-                // channel.description,
                 color: Colors.blue,
                 playSound: true,
                 icon: '@mipmap/ic_launcher',
@@ -63,7 +63,7 @@ class PageLayout extends StatelessWidget {
         checkForNotification = true;
       }
     });
-
+// TODO: implement initState and listen for remote notification
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       checkForNotification = true;
       RemoteNotification? notification = message.notification;
@@ -71,31 +71,13 @@ class PageLayout extends StatelessWidget {
       if (notification != null && android != null) {
         checkForNotification = true;
       }
-      if (notification != null) {
-        // checkForNotication = true;
-      }
+      if (notification != null) {}
     });
   }
 
-  // void showNotification() {
-  //   setState(() {
-  //     _counter++;
-  //   });
-  //   flutterLocalNotificationsPlugin.show(
-  //       0,
-  //       "Testing $_counter",
-  //       "How you doin ?",
-  //       NotificationDetails(
-  //           android: AndroidNotificationDetails(channel.id, channel.name,
-  //               importance: Importance.high,
-  //               color: Colors.blue,
-  //               playSound: true,
-  //               icon: '@mipmap/ic_launcher')));
-  // }
-
   @override
   Widget build(BuildContext context) {
-    print('notification status: ${globals.newNotifications}');
+    // consumer of tabmanger
     return Consumer<TabManager>(builder: (context, tabManager, child) {
       return Scaffold(
           body: (globals.newNotifications)
@@ -105,7 +87,7 @@ class PageLayout extends StatelessWidget {
             currentIndex: (globals.newNotifications)
                 ? tabManager.selectedTab = 3
                 : tabManager.selectedTab,
-            // tabManager.selectedTab = 1,
+            //change the body based on the index of the bottom navigation tap
             onTap: (index) {
               globals.newNotifications = false;
               tabManager.goToTab(index);

@@ -4,80 +4,77 @@ import 'package:second_shopp/components/home_slideshow.dart';
 import 'package:second_shopp/components/profile_subPages/cart_page.dart';
 import 'package:second_shopp/components/tile_components.dart';
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
-import 'package:second_shopp/globals.dart' as globals;
 
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
 
-  List imgs = [
-    'assets/images/1.jpg',
-    'assets/images/2.jpg',
-    'assets/images/3.jpg',
-    'assets/images/4.jpg',
-    'assets/images/5.jpg',
-    'assets/images/6.jpg',
-    'assets/images/7.jpg',
-  ];
-
-  // List ProductsDocs = [];
+// lists to store data from multiple streams
   List popularItems = [];
   List recommendedItems = [];
   List featuredItems = [];
 
   @override
   Widget build(BuildContext context) {
+    //stream1 from popular items
     final Stream<QuerySnapshot> stream1 = FirebaseFirestore.instance
         .collection('Products')
         .doc('SubProductsCategory')
         .collection('PopularItems')
         .snapshots();
-
+    //stream2 from recommended items
     final Stream<QuerySnapshot> stream2 = FirebaseFirestore.instance
         .collection('Products')
         .doc('SubProductsCategory')
         .collection('RecommendedItems')
         .snapshots();
-
+    //stream3 from Featured items
     final Stream<QuerySnapshot> stream3 = FirebaseFirestore.instance
         .collection('Products')
         .doc('SubProductsCategory')
         .collection('FeaturedItem')
         .snapshots();
-
+    //managing tuple stream data into list
     return StreamBuilder3<QuerySnapshot, QuerySnapshot, QuerySnapshot>(
       streams: Tuple3(stream1, stream2, stream3),
       builder: (context, snapshots) {
         popularItems = [];
         recommendedItems = [];
         featuredItems = [];
-
+        //circular progress indicator
         if (!snapshots.item1.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
+        //circular progress indicator
         if (!snapshots.item2.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
+        //circular progress indicator
         if (!snapshots.item3.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
+
+        // converting JSON to list
         snapshots.item1.data!.docs.map((DocumentSnapshot document) {
           Map productdata = document.data() as Map<String, dynamic>;
           popularItems.add(productdata);
         }).toList();
+
+        // converting JSON to list
         snapshots.item2.data!.docs.map((DocumentSnapshot document) {
           Map productdata = document.data() as Map<String, dynamic>;
           recommendedItems.add(productdata);
         }).toList();
+
+        // converting JSON to list
         snapshots.item3.data!.docs.map((DocumentSnapshot document) {
           Map productdata = document.data() as Map<String, dynamic>;
           featuredItems.add(productdata);
-          // a['documentID'] = document.id;
         }).toList();
 
         return Scaffold(
@@ -115,13 +112,14 @@ class Home extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // ******************************************** Featured Items *********************************
                           const SizedBox(
                             child: Text(
                               'Featured Items',
                               style: TextStyle(fontSize: 25),
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             height: 210,
                             child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -156,6 +154,7 @@ class Home extends StatelessWidget {
                                     },
                                     itemCount: featuredItems.length)),
                           ),
+                          // ******************************************** Popular Items *********************************
                           const SizedBox(
                             child: Text(
                               'Popular Items',
@@ -196,6 +195,7 @@ class Home extends StatelessWidget {
                                     },
                                     itemCount: popularItems.length)),
                           ),
+                          // ******************************************** recommended Items *********************************
                           const SizedBox(
                             child: Text(
                               'Recommended Items',

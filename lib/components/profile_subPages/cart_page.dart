@@ -11,7 +11,8 @@ class CartItems extends StatelessWidget {
             // ignore: prefer_const_constructors
             title: Text('On Cart'),
             backgroundColor: Colors.orange.shade400,
-            leading: BackButton(color: Colors.black)),
+            leading: const BackButton(color: Colors.black)),
+        // list builder to list the wish list items
         body: ListView.builder(
             itemBuilder: (context, index) => (globals.cartItems.length != 0)
                 ? CartTile(
@@ -23,16 +24,17 @@ class CartItems extends StatelessWidget {
             itemCount: globals.cartItems.length));
   }
 
+  // cart tile widget for each items in the wish list
   Widget CartTile(pimage, ptitle, pdescription, pprice) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       // ignore: deprecated_member_use
       child: Container(
-        padding: EdgeInsets.fromLTRB(4, 12, 15, 12),
-        color: Color.fromARGB(255, 255, 237, 209),
+        padding: const EdgeInsets.fromLTRB(4, 12, 15, 12),
+        color: const Color.fromARGB(255, 255, 237, 209),
         child: Row(
           children: <Widget>[
-            SizedBox(width: 15),
+            const SizedBox(width: 15),
             Expanded(
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,7 +55,7 @@ class CartItems extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             '$ptitle',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
                               color: Colors.black,
@@ -61,7 +63,7 @@ class CartItems extends StatelessWidget {
                           ),
                           Text(
                             '$pdescription',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.normal,
                               fontSize: 14,
                               color: Colors.black,
@@ -72,7 +74,7 @@ class CartItems extends StatelessWidget {
                     ),
                     Text(
                       'Price : Rs $pprice',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         fontSize: 14,
                         color: Colors.black,

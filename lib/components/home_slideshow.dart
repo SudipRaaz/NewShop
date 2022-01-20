@@ -11,8 +11,9 @@ class OfferSlider extends StatefulWidget {
 }
 
 class _OfferSliderState extends State<OfferSlider> {
+  // active image in the slider
   int activeIndex = 0;
-
+  // page index slider
   void pageIndicate(index) {
     setState(() {
       activeIndex = index;
@@ -24,6 +25,7 @@ class _OfferSliderState extends State<OfferSlider> {
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: [
+        // slider for the offer images
         CarouselSlider.builder(
           itemCount: OfferImages.images.length,
           options: CarouselOptions(
@@ -33,22 +35,22 @@ class _OfferSliderState extends State<OfferSlider> {
             viewportFraction: 0.96,
             autoPlayInterval: Duration(seconds: 4),
             onPageChanged: (index, reason) => pageIndicate(index),
-            // autoPlayAnimationDuration: Duration(seconds: 1)
           ),
           itemBuilder: (context, index, realIndex) {
+            // container for image
             return Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(OfferImages.images[index]),
                       fit: BoxFit.cover),
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
             );
           },
         ),
+        // slider indicatino: bubble dot
         SizedBox(
           height: 20,
           child: Container(
-            // color: Colors.black54,
             child: buildIndicator(),
           ),
         )
@@ -56,6 +58,7 @@ class _OfferSliderState extends State<OfferSlider> {
     );
   }
 
+  // image index indicator for slider images
   buildIndicator() => AnimatedSmoothIndicator(
         activeIndex: activeIndex,
         count: OfferImages.images.length,

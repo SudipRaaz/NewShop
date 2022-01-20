@@ -1,4 +1,5 @@
 class OfferImages {
+  // list of assets path to display in offer slider
   static List<String> images = [
     'assets/images/1.jpg',
     'assets/images/2.jpg',

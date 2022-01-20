@@ -4,25 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:second_shopp/components/Authetication/login_page.dart';
 import 'package:second_shopp/components/profile_subPages/cart_page.dart';
-import 'package:second_shopp/components/profile_tile.dart';
-import 'package:second_shopp/components/profile_subPages/buy_Item.dart';
 import 'package:second_shopp/model/tab_manager.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Profile extends StatefulWidget {
-  Profile({Key? key}) : super(key: key);
+  const Profile({Key? key}) : super(key: key);
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+  // instance of firebase authetication service
   final _auth = FirebaseAuth.instance;
 
-  // String profileImg = '';
   String? documentId = '';
 
   double iconSize = 50;
@@ -32,16 +29,18 @@ class _ProfileState extends State<Profile> {
   bool isVisible = false;
 
   String customerCare = 'assets/images/black_customerCare.png';
-
-  String customerCarePhone = '9846420632';
+//customer care contact number
+  String customerCarePhone = '+9779866115102';
 
   @override
   Widget build(BuildContext context) {
+    //instance of tabmanger
     final tabprovider = Provider.of<TabManager>(context, listen: true);
-
+// instance of firebase collection 'UserData'
     CollectionReference users =
         FirebaseFirestore.instance.collection('UserData');
 
+//getting documentID
     User? userToken = _auth.currentUser;
     documentId = userToken?.uid;
 
@@ -49,14 +48,15 @@ class _ProfileState extends State<Profile> {
       future: users.doc(documentId).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        // if there is any error
         if (snapshot.hasError) {
           return const Text("Something went wrong");
         }
-
+        // if data has not yet received
         if (!snapshot.hasData) {
-          return Center(child: const CircularProgressIndicator.adaptive());
+          return const Center(child: CircularProgressIndicator.adaptive());
         }
-
+        // after the connection is done return scaffold
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
@@ -68,6 +68,7 @@ class _ProfileState extends State<Profile> {
                 child: Column(children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
+                    //***********************top row for review app, customer care and sign out ***************** */
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -80,6 +81,7 @@ class _ProfileState extends State<Profile> {
                                       image: AssetImage(
                                           'assets/images/review_logo.png')))),
                           onTap: () {
+                            //dialog box for reviewing appliation
                             showCupertinoDialog<void>(
                               context: context,
                               builder: (BuildContext context) =>
@@ -139,7 +141,6 @@ class _ProfileState extends State<Profile> {
                                 ],
                               ),
                             );
-                            print('rating pressed');
                           },
                           radius: 20,
                           splashColor: Colors.amberAccent,
@@ -177,32 +178,28 @@ class _ProfileState extends State<Profile> {
                             color: Colors.redAccent,
                           ),
                           onTap: () {
+                            // go to home page
                             tabprovider.goToTab(0);
-
+                            // sign out the user
                             _auth.signOut();
-
-                            // Navigator.of(context).pushReplacement(
-                            //     MaterialPageRoute(builder: (context) => LoginPage()));
                           },
                           radius: 20,
                           splashColor: Colors.amberAccent,
-                          // highlightColor:
                         ),
                       ],
                     ),
                   ),
-                  // const SizedBox(
-                  //   height: 20,
-                  // ),
-                  //****************************************** user profile **************************************** */
+
+                  //****************************************** user information card **************************************** */
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 30),
                     child: Container(
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
                         color: Colors.orange.shade300,
-                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(14)),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
@@ -215,14 +212,11 @@ class _ProfileState extends State<Profile> {
                       child: Row(
                         children: [
                           const CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                "https://images.unsplash.com/photo-1597466765990-64ad1c35dafc"),
+                            backgroundImage:
+                                AssetImage('assets/images/customer.png'),
                             backgroundColor: Colors.orange,
                             radius: 50,
                           ),
-                          // const SizedBox(
-                          //   width: 8,
-                          // ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -230,8 +224,6 @@ class _ProfileState extends State<Profile> {
                                 constraints: BoxConstraints(maxWidth: 250),
                                 child: Text(
                                   " ${data['Name']}",
-                                  // 'fff fffff ffffff ffffff ff ffffff ffffff',
-                                  // 'sudip raj adhikari form chitwan',
                                   maxLines: 1,
                                   style: const TextStyle(
                                       fontSize: 25,
@@ -306,15 +298,6 @@ class _ProfileState extends State<Profile> {
                           tileName: "Wish List",
                         ),
                       ),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     // Navigator.push(context,
-                      //     //     MaterialPageRoute(builder: (context) => BuyDetail_Page(press: ,)));
-                      //   },
-                      //   child: _ProfileTile(
-                      //     tileName: "Watching Items",
-                      //   ),
-                      // ),
                     ],
                   )
                 ]),
@@ -331,13 +314,14 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+// open whatsapp for customer support
   void openwhatsapp(context) async {
     String whatsapp = customerCarePhone;
-    var whatsappURl_android = "whatsapp://send?phone=";
-    var whatappURL_ios =
-        "https://wa.me/$whatsapp?text=${Uri.parse("I have some problems with Second Shop Application. Would you help me?")}";
+    var whatsappURl_android =
+        "whatsapp://send?phone=" + whatsapp + "&text= I am having problem!";
+    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("hello")}";
 
-    // android , web
+    // android , web check if it can be launch or not
     if (await canLaunch(whatsappURl_android)) {
       await launch(whatsappURl_android);
     } else {
@@ -345,22 +329,24 @@ class _ProfileState extends State<Profile> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Second Shop uses WhatsApp for messaging'),
-              content: Text('Download WhatsApp to use messanging feature.'),
+              title: const Text('Second Shop uses WhatsApp for messaging'),
+              content:
+                  const Text('Download WhatsApp to use messanging feature.'),
               actions: [
                 TextButton(
                   // FlatButton widget is used to make a text to work like a button
                   onPressed: () {
                     Navigator.pop(context);
                   }, // function used to perform after pressing the button
-                  child: Text('CANCEL'),
+                  child: const Text('CANCEL'),
                 ),
                 TextButton(
                   // textColor: Colors.black,
+                  // redirect to downlaod whatsApp
                   onPressed: () {
                     StoreRedirect.redirect(androidAppId: 'com.whatsapp');
                   },
-                  child: Text('DOWNLOAD'),
+                  child: const Text('DOWNLOAD'),
                 ),
               ],
               shape: const RoundedRectangleBorder(
@@ -369,26 +355,16 @@ class _ProfileState extends State<Profile> {
           });
     }
   }
-
-  Future<dynamic> showDialogBox(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(2.0))),
-            child: Container(),
-          );
-        });
-  }
 }
 
+// profile wish list tile
 class _ProfileTile extends StatelessWidget {
   String tileName;
   _ProfileTile({Key? key, required this.tileName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    //retunr the tile for profile page
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
@@ -406,7 +382,6 @@ class _ProfileTile extends StatelessWidget {
               tileName,
               style: const TextStyle(fontSize: 25),
             ),
-            // Spacer(),
             const Icon(
               Icons.play_arrow_outlined,
               size: 45,

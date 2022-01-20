@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:second_shopp/components/category_tiles.dart';
-import 'package:second_shopp/model/images.dart';
 import 'package:second_shopp/screen/category_items.dart';
 
 class Category extends StatelessWidget {
   Category({Key? key}) : super(key: key);
 
+// categories available in the application
   final List<String> entries = [
     'Fashion',
     'Electronics',
@@ -17,7 +16,6 @@ class Category extends StatelessWidget {
     'Sports & Leisure',
     'Toys and Games',
     'Vehicles',
-    'Service'
   ];
 
   @override
@@ -31,9 +29,11 @@ class Category extends StatelessWidget {
         ),
         centerTitle: true,
       ),
+      // using listview builder
       body: ListView.builder(
         itemCount: entries.length,
         itemBuilder: (context, index) {
+          // returning a decorated container with shadow
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             child: Container(
@@ -48,6 +48,7 @@ class Category extends StatelessWidget {
                       offset: const Offset(0, 3),
                     ),
                   ]),
+              // open the sub page for displaying the items
               child: GestureDetector(
                 onTap: () {
                   String categoryName = entries[index].toString();

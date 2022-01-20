@@ -10,21 +10,23 @@ import 'package:provider/provider.dart';
 
 import 'package:second_shopp/model/data/sell_dao.dart';
 import 'package:second_shopp/model/data/sell_data.dart';
-import 'package:second_shopp/model/data/transaction_dao.dart';
 
 class Sell extends StatefulWidget {
-  Sell({Key? key}) : super(key: key);
+  const Sell({Key? key}) : super(key: key);
 
   @override
   State<Sell> createState() => _SellState();
 }
 
 class _SellState extends State<Sell> {
+  // formkey for validation
   final _formKey = GlobalKey<FormState>();
+  // TextformField controllers
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
+// variables to store product details
   File? _image;
   final imagePicker = ImagePicker();
   String downloadURL = '';
@@ -33,7 +35,10 @@ class _SellState extends State<Sell> {
   String sellerName = '';
   String sellerPhone = '';
 
+// initial choosen value
   String subCategoriesChoosen = 'Fashion';
+
+// list of category available for upload
   List<String> subCategories = [
     'Fashion',
     'Electronics',
@@ -48,8 +53,7 @@ class _SellState extends State<Sell> {
     'Service'
   ];
 
-  // picking the image
-
+  // picking the image for the local storage
   Future imagePickerMethod() async {
     final pick = await imagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -72,14 +76,8 @@ class _SellState extends State<Sell> {
           .child("post_$imgId");
 
       await reference.putFile(_image);
+      // get the download URL of the image uploaded in the firebase storage
       downloadURL = await reference.getDownloadURL();
-
-      // cloud firestore
-      // await firebaseFirestore.collection("Products")
-      //     // .doc()
-      //     // .collection("Images")
-      //     .add({'downloadURL': downloadURL}).whenComplete(
-      //         () => showSnackBar("Image Uploaded", Duration(seconds: 2)));
       _storeSellItems(sellDao, downloadURL);
     } catch (e) {
       showSnackBar("Error: $e", Duration(seconds: 5));
@@ -88,11 +86,12 @@ class _SellState extends State<Sell> {
 
   @override
   Widget build(BuildContext context) {
+    // get the current user token
     User? userToken = _auth.currentUser;
     userID = userToken?.uid;
     print("userToken = $userID");
 
-    // TODO: Add MessageDao
+    // TODO: create the object of sell Dao
     final sellDao = Provider.of<Sell_Dao>(context, listen: false);
 
     FirebaseFirestore.instance
@@ -102,11 +101,9 @@ class _SellState extends State<Sell> {
         .listen((event) {
       sellerName = event.data()!['Name'];
       sellerPhone = event.data()!['Phone'];
-      print("sellerName : $sellerName ,sellerPhone: $sellerPhone");
     });
 
     return Scaffold(
-        //key: _formKey,
         appBar: AppBar(
           title: Center(child: Text('Quick Sell')),
           backgroundColor: Colors.orange.shade400,
@@ -124,9 +121,9 @@ class _SellState extends State<Sell> {
                   ),
                 ),
               ),
+              // container for image to upload
               Container(
                   height: 300,
-                  // color: Colors.black38,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -136,7 +133,6 @@ class _SellState extends State<Sell> {
                           height: 300,
                           width: 350,
                           decoration: const BoxDecoration(
-                              // image: DecorationImage(image: AssetImage('ass')),
                               color: Colors.amberAccent,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15))),
@@ -167,6 +163,7 @@ class _SellState extends State<Sell> {
               const SizedBox(
                 height: 5,
               ),
+              // data input fields
               Padding(
                   padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
                   child: Container(
@@ -187,14 +184,14 @@ class _SellState extends State<Sell> {
                             controller: _titleController,
                             textAlign: TextAlign.start,
                             textAlignVertical: TextAlignVertical.bottom,
-                            decoration: InputDecoration(
-                              contentPadding: new EdgeInsets.symmetric(
+                            decoration: const InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
                                   vertical: 18.0, horizontal: 10.0),
                               hintText: 'Enter Product Name',
                               border: OutlineInputBorder(),
                             )),
                         const Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                          padding: EdgeInsets.only(top: 10),
                           child: SizedBox(
                             child: Text('Description : ',
                                 textAlign: TextAlign.start,
@@ -227,7 +224,7 @@ class _SellState extends State<Sell> {
                           ),
                         ),
                         Container(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             height: 40,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(6),
@@ -247,6 +244,7 @@ class _SellState extends State<Sell> {
                                     subCategoriesChoosen = newValue!;
                                   });
                                 },
+                                // list of category available
                                 items: <String>[
                                   'Fashion',
                                   'Electronics',
@@ -258,7 +256,6 @@ class _SellState extends State<Sell> {
                                   'Sports & Leisure',
                                   'Toys and Games',
                                   'Vehicles',
-                                  'Service'
                                 ].map<DropdownMenuItem<String>>((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
@@ -287,8 +284,8 @@ class _SellState extends State<Sell> {
                                     controller: _priceController,
                                     textAlign: TextAlign.start,
                                     textAlignVertical: TextAlignVertical.bottom,
-                                    decoration: InputDecoration(
-                                      contentPadding: new EdgeInsets.symmetric(
+                                    decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
                                           vertical: 15.0, horizontal: 10.0),
                                       label: Text('NPR'),
                                       hintText: 'Enter Selling Price',
@@ -308,7 +305,7 @@ class _SellState extends State<Sell> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
+            child: SizedBox(
               height: 50,
               width: 150,
               child: MaterialButton(
@@ -321,6 +318,7 @@ class _SellState extends State<Sell> {
                       const SnackBar(content: Text('Processing Data')),
                     );
                     try {
+                      // ignore: unnecessary_null_comparison
                       if (_priceController.text != null) {
                         if (_image != null) {
                           try {
@@ -329,17 +327,20 @@ class _SellState extends State<Sell> {
                               _image = null;
                             });
                           } catch (e) {
-                            showSnackBar(
-                                "Error : $e ", Duration(milliseconds: 800));
-                            print("Error: $e");
+                            // snack bar showing error
+                            showSnackBar("Error : $e ",
+                                const Duration(milliseconds: 800));
                           }
                         }
                       } else {
+                        // snack bar showing up for not selecting any image
                         showSnackBar(
-                            "Select Image", Duration(milliseconds: 1200));
+                            "Select Image", const Duration(milliseconds: 1200));
                       }
                     } catch (e) {
-                      showSnackBar("Error: $e", Duration(milliseconds: 800));
+                      // snack bar showing error
+                      showSnackBar(
+                          "Error: $e", const Duration(milliseconds: 800));
                     }
                   }
                 },
@@ -355,6 +356,7 @@ class _SellState extends State<Sell> {
         ]));
   }
 
+// TODO: stoting the data from controller into the object of Sell_Data class
   void _storeSellItems(Sell_Dao sellDao, downloadURL) {
     final selldata = Sell_data(
       productID: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -367,15 +369,18 @@ class _SellState extends State<Sell> {
       sellerName: sellerName,
       sellerPhone: sellerPhone,
     );
+    //storing the data to the firebase
     sellDao.saveSellData(selldata, subCategoriesChoosen.toString());
+    // clearing the fields once the data is uploaded
     _titleController.clear();
     _descriptionController.clear();
-    // _categoryController.clear();
     _priceController.clear();
     setState(() {});
+    //showing the success message
     showSnackBar("Product Added Sucessfully", Duration(milliseconds: 800));
   }
 
+// snackbhar method to show messages to user
   showSnackBar(String snackText, Duration d) {
     final snackBar = SnackBar(content: Text(snackText), duration: d);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -38,7 +38,7 @@ class Sell_data {
         sellerName: (json['sellerName'] as String),
         sellerPhone: (json['sellerPhone'] as String),
       );
-
+  // concert to json
   Map<String, dynamic> toJson() => <String, dynamic>{
         'productID': productID,
         'title': title,

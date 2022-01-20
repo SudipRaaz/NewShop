@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// manages the theme for light font in the appliction
 class SecondShopTheme {
   static TextTheme lightTextTheme = TextTheme(
     bodyText1: GoogleFonts.openSans(
@@ -30,6 +31,7 @@ class SecondShopTheme {
     ),
   );
 
+// manages the theme for dark font in the appliction
   static TextTheme darkTextTheme = TextTheme(
     bodyText1: GoogleFonts.openSans(
       fontSize: 14.0,
@@ -58,6 +60,7 @@ class SecondShopTheme {
     ),
   );
 
+// light theme in the application
   static ThemeData light() {
     return ThemeData(
       brightness: Brightness.light,
@@ -79,6 +82,7 @@ class SecondShopTheme {
     );
   }
 
+// dark theme colors in the application
   static ThemeData dark() {
     return ThemeData(
       brightness: Brightness.dark,

@@ -1,6 +1,10 @@
+//ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
+// ignore: camel_case_types
 class Notify_Contend extends StatelessWidget {
+  // ignore: non_constant_identifier_names
   String? Notification_title;
   String? description;
   IconData? symbol;
@@ -14,6 +18,7 @@ class Notify_Contend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Notification_title != null) {
+      // Container for the notification contend
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
@@ -28,7 +33,9 @@ class Notify_Contend extends StatelessWidget {
                   Icons.notifications_active,
                   size: 38,
                 ),
+                // Notification container heading
                 title: Text('$Notification_title'),
+                // Notification sub heading
                 subtitle: Text('$description'),
               ),
             ),
@@ -36,19 +43,18 @@ class Notify_Contend extends StatelessWidget {
         ),
       );
     }
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 250),
-            child: Text(
-              "No new Nofications",
-              style: TextStyle(fontSize: 20),
-            ),
+    // If no Notification is available
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: const [
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 250),
+          child: Text(
+            "No new Nofications",
+            style: TextStyle(fontSize: 20),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

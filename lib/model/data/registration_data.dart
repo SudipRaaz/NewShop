@@ -17,14 +17,14 @@ class Registration {
       required this.email,
       required this.password,
       this.reference});
-
+  // convert from json
   factory Registration.fromJson(Map<dynamic, dynamic> json) => Registration(
       name: json['Name'] as String,
       address: json['Address'] as String,
       phone: int.parse(json['Phone'] as String),
       email: json['Email'] as String,
       password: json['password'] as String);
-
+  // convert to json
   Map<String, dynamic> toJson() => <String, dynamic>{
         'Name': name,
         'Address': address,
